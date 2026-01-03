@@ -35,9 +35,9 @@
             background-size: cover; border: 2px solid #ff0000;
         }
         .play-btn { 
-            background: #ff0000; color: white; border: none; padding: 15px 30px; 
+            background: #ff0000; color: white; border: none; padding: 20px 40px; 
             border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; margin-top: 15px;
-            transition: 0.3s;
+            font-size: 1.2rem; transition: 0.3s;
         }
         .play-btn:hover { transform: scale(1.05); background: #ff3333; }
 
@@ -47,11 +47,13 @@
         .card h2 { font-size: 1rem; margin-bottom: 10px; }
         .apply-btn { background: #ff0000; color: white; border: none; padding: 8px; border-radius: 5px; width: 90%; cursor: pointer; font-weight: bold; }
 
-        /* TTNİ BİLGİ BUTONU */
         .info-trigger {
             margin-top: 40px; cursor: pointer; color: #ff0000; font-weight: 900; 
             text-transform: uppercase; letter-spacing: 2px; text-decoration: underline;
         }
+        
+        /* MP4 DOSYASINI GİZLE AMA SESİNİ KULLAN */
+        #bg-video { display: none; }
     </style>
 </head>
 <body>
@@ -72,11 +74,12 @@
             <h3>DEHA INC.</h3>
             <p style="color: #888;">911 CARRERA</p>
             
-            <audio id="track" loop src="911-carrera.mp3"></audio>
+            <video id="bg-video" loop>
+                <source src="911.mp4" type="video/mp4">
+            </video>
             
             <button class="play-btn" id="master-btn" onclick="toggleMusic()">ŞARKIYI BAŞLAT</button>
         </div>
-        <p style="margin-top: 20px; font-size: 0.7rem; color: #444;">Ses gelmezse sayfaya bir kez tıkla sonra butona bas.</p>
         
         <p class="info-trigger" onclick="showTtniInfo()">TTNİ'Yİ TANIMAK İSTİYORSAN TIKLA</p>
     </div>
@@ -92,18 +95,25 @@
     </div>
 
     <script>
-        const song = document.getElementById('track');
+        const video = document.getElementById('bg-video');
         const btn = document.getElementById('master-btn');
 
         function toggleMusic() {
-            if (song.paused) {
-                song.play().then(() => {
+            if (video.paused) {
+                // Tarayıcı hatasını aşmak için play() fonksiyonunu tetikliyoruz
+                video.play().then(() => {
                     btn.innerText = "ŞARKIYI DURDUR";
-                }).catch(e => {
-                    alert("Önce sayfada bir yere tıkla!");
+                }).catch(err => {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Dosya Bulunamadı',
+                        text: 'Lütfen dosya adının tam olarak 911.mp4 olduğundan ve HTML ile aynı yerde olduğundan emin ol!',
+                        background: '#000',
+                        color: '#fff'
+                    });
                 });
             } else {
-                song.pause();
+                video.pause();
                 btn.innerText = "ŞARKIYI BAŞLAT";
             }
         }
@@ -123,7 +133,7 @@
             });
         }
 
-        // Kar Yağışı
+        // Kar Yağışı Animasyonu
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
