@@ -18,7 +18,8 @@
             display: flex; justify-content: space-around; align-items: center;
         }
         .logo { font-weight: 900; color: #ff0000; font-size: 1.5rem; text-shadow: 0 0 10px #ff0000; }
-        .nav-link { color: white; text-decoration: none; border: 1px solid #ff0000; padding: 5px 15px; border-radius: 10px; cursor: pointer; }
+        .nav-link { color: white; text-decoration: none; border: 1px solid #ff0000; padding: 5px 15px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .nav-link:hover { background: #ff0000; }
 
         .page { display: none; width: 100%; max-width: 1100px; padding: 40px 20px; position: relative; z-index: 10; flex-direction: column; align-items: center; }
         .active-page { display: flex; }
@@ -36,13 +37,21 @@
         .play-btn { 
             background: #ff0000; color: white; border: none; padding: 15px 30px; 
             border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; margin-top: 15px;
+            transition: 0.3s;
         }
+        .play-btn:hover { transform: scale(1.05); background: #ff3333; }
 
         /* BAŞVURU (YAN YANA) */
         .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; }
         .card { background: #111; border: 1px solid #ff0000; padding: 20px 5px; border-radius: 15px; text-align: center; }
         .card h2 { font-size: 1rem; margin-bottom: 10px; }
         .apply-btn { background: #ff0000; color: white; border: none; padding: 8px; border-radius: 5px; width: 90%; cursor: pointer; font-weight: bold; }
+
+        /* TTNİ BİLGİ BUTONU */
+        .info-trigger {
+            margin-top: 40px; cursor: pointer; color: #ff0000; font-weight: 900; 
+            text-transform: uppercase; letter-spacing: 2px; text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -63,12 +72,13 @@
             <h3>DEHA INC.</h3>
             <p style="color: #888;">911 CARRERA</p>
             
-            <audio id="track" loop>
-                <source src="911-carrera.mp3"
+            <audio id="track" loop src="911-carrera.mp3"></audio>
             
-            <button class="play-btn" onclick="startMusic()">SESİ AÇ VE OYNAT</button>
+            <button class="play-btn" id="master-btn" onclick="toggleMusic()">ŞARKIYI BAŞLAT</button>
         </div>
         <p style="margin-top: 20px; font-size: 0.7rem; color: #444;">Ses gelmezse sayfaya bir kez tıkla sonra butona bas.</p>
+        
+        <p class="info-trigger" onclick="showTtniInfo()">TTNİ'Yİ TANIMAK İSTİYORSAN TIKLA</p>
     </div>
 
     <div id="apply-page" class="page">
@@ -83,18 +93,34 @@
 
     <script>
         const song = document.getElementById('track');
+        const btn = document.getElementById('master-btn');
 
-        function startMusic() {
-            song.play().then(() => {
-                console.log("Müzik başladı!");
-            }).catch(e => {
-                alert("Lütfen önce sayfada herhangi bir yere dokun, sonra butona bas!");
-            });
+        function toggleMusic() {
+            if (song.paused) {
+                song.play().then(() => {
+                    btn.innerText = "ŞARKIYI DURDUR";
+                }).catch(e => {
+                    alert("Önce sayfada bir yere tıkla!");
+                });
+            } else {
+                song.pause();
+                btn.innerText = "ŞARKIYI BAŞLAT";
+            }
         }
 
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById(id).classList.add('active-page');
+        }
+
+        function showTtniInfo() {
+            Swal.fire({
+                title: 'TTNİ Profili',
+                background: '#0a0e14',
+                color: '#fff',
+                html: '<b>Mete Türk (TTNİ)</b><br>Yaş: 11<br>IP: play.credos.qzz.io',
+                confirmButtonColor: '#ff0000'
+            });
         }
 
         // Kar Yağışı
