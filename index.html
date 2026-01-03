@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: #000; color: white; min-height: 100vh; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; }
+        body { background: #000; color: white; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
         
         #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
 
@@ -18,13 +18,11 @@
             display: flex; justify-content: space-around; align-items: center;
         }
         .logo { font-weight: 900; color: #ff0000; font-size: 1.5rem; text-shadow: 0 0 10px #ff0000; }
-        .nav-link { color: white; text-decoration: none; border: 1px solid #ff0000; padding: 5px 15px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
-        .nav-link:hover { background: #ff0000; }
+        .nav-link { color: white; text-decoration: none; border: 1px solid #ff0000; padding: 5px 15px; border-radius: 10px; cursor: pointer; }
 
         .page { display: none; width: 100%; max-width: 1100px; padding: 40px 20px; position: relative; z-index: 10; flex-direction: column; align-items: center; }
         .active-page { display: flex; }
 
-        /* MÜZİK KARTI */
         .music-card {
             background: rgba(30, 0, 0, 0.6); border: 2px solid #ff0000; padding: 30px; 
             border-radius: 20px; text-align: center; width: 350px; box-shadow: 0 0 30px rgba(255,0,0,0.4);
@@ -35,25 +33,21 @@
             background-size: cover; border: 2px solid #ff0000;
         }
         .play-btn { 
-            background: #ff0000; color: white; border: none; padding: 20px 40px; 
+            background: #ff0000; color: white; border: none; padding: 20px; 
             border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; margin-top: 15px;
-            font-size: 1.2rem; transition: 0.3s;
         }
-        .play-btn:hover { transform: scale(1.05); background: #ff3333; }
 
-        /* BAŞVURU (YAN YANA) */
-        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; }
-        .card { background: #111; border: 1px solid #ff0000; padding: 20px 5px; border-radius: 15px; text-align: center; }
-        .card h2 { font-size: 1rem; margin-bottom: 10px; }
-        .apply-btn { background: #ff0000; color: white; border: none; padding: 8px; border-radius: 5px; width: 90%; cursor: pointer; font-weight: bold; }
-
+        /* Bilgilendirme Butonu */
         .info-trigger {
             margin-top: 40px; cursor: pointer; color: #ff0000; font-weight: 900; 
-            text-transform: uppercase; letter-spacing: 2px; text-decoration: underline;
+            text-decoration: underline; letter-spacing: 1px;
         }
+
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; }
+        .card { background: #111; border: 1px solid #ff0000; padding: 20px 5px; border-radius: 15px; text-align: center; }
+        .apply-btn { background: #ff0000; color: white; border: none; padding: 8px; border-radius: 5px; width: 90%; cursor: pointer; }
         
-        /* MP4 DOSYASINI GİZLE AMA SESİNİ KULLAN */
-        #bg-video { display: none; }
+        #player-video { display: none; }
     </style>
 </head>
 <body>
@@ -74,18 +68,18 @@
             <h3>DEHA INC.</h3>
             <p style="color: #888;">911 CARRERA</p>
             
-            <video id="bg-video" loop>
-                <source src="911.mp4" type="video/mp4">
+            <video id="player-video" loop>
+                <source src="911 CARRERA - DEHA INC. (Official Music Video).mp4" type="video/mp4">
             </video>
             
-            <button class="play-btn" id="master-btn" onclick="toggleMusic()">ŞARKIYI BAŞLAT</button>
+            <button class="play-btn" id="btn-text" onclick="startControl()">ŞARKIYI AÇ</button>
         </div>
         
-        <p class="info-trigger" onclick="showTtniInfo()">TTNİ'Yİ TANIMAK İSTİYORSAN TIKLA</p>
+        <p class="info-trigger" onclick="showInfo()">TTNİ'Yİ TANIMAK İSTİYORSAN TIKLA</p>
     </div>
 
     <div id="apply-page" class="page">
-        <h2 style="color:#00ff88; margin-bottom: 20px;">YETKİLİ BAŞVURULARI</h2>
+        <h2 style="color:#00ff88; margin-bottom: 20px;">BAŞVURULAR</h2>
         <div class="grid">
             <div class="card"><h2 style="color:#00ff88">HELPER</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">GİT</button></div>
             <div class="card"><h2 style="color:#00d2ff">ACC</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">GİT</button></div>
@@ -95,26 +89,25 @@
     </div>
 
     <script>
-        const video = document.getElementById('bg-video');
-        const btn = document.getElementById('master-btn');
+        const v = document.getElementById('player-video');
+        const t = document.getElementById('btn-text');
 
-        function toggleMusic() {
-            if (video.paused) {
-                // Tarayıcı hatasını aşmak için play() fonksiyonunu tetikliyoruz
-                video.play().then(() => {
-                    btn.innerText = "ŞARKIYI DURDUR";
-                }).catch(err => {
+        function startControl() {
+            if (v.paused) {
+                v.play().then(() => {
+                    t.innerText = "ŞARKIYI DURDUR";
+                }).catch(() => {
+                    // Hata durumunda (dosya yoksa veya isim yanlışsa) uyarı ver
                     Swal.fire({
-                        icon: 'info',
-                        title: 'Dosya Bulunamadı',
-                        text: 'Lütfen dosya adının tam olarak 911.mp4 olduğundan ve HTML ile aynı yerde olduğundan emin ol!',
-                        background: '#000',
-                        color: '#fff'
+                        icon: 'error',
+                        title: 'Dosya Hatası',
+                        text: 'Lütfen video dosyasının adının tam doğru olduğundan emin ol!',
+                        background: '#000', color: '#fff'
                     });
                 });
             } else {
-                video.pause();
-                btn.innerText = "ŞARKIYI BAŞLAT";
+                v.pause();
+                t.innerText = "ŞARKIYI DEVAM ET";
             }
         }
 
@@ -123,17 +116,16 @@
             document.getElementById(id).classList.add('active-page');
         }
 
-        function showTtniInfo() {
+        function showInfo() {
             Swal.fire({
                 title: 'TTNİ Profili',
-                background: '#0a0e14',
-                color: '#fff',
-                html: '<b>Mete Türk (TTNİ)</b><br>Yaş: 11<br>IP: play.credos.qzz.io',
+                background: '#0a0e14', color: '#fff',
+                html: '<b>Mete Türk (TTNİ)</b><br>Yaş: 11<br>Sunucu: play.credos.qzz.io',
                 confirmButtonColor: '#ff0000'
             });
         }
 
-        // Kar Yağışı Animasyonu
+        // Kar Yağışı
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
