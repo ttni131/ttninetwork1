@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTNİ Network | Deha 911</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #000; color: white; min-height: 100vh; overflow-x: hidden; display: flex; flex-direction: column; align-items: center; }
+        
+        #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+
+        nav { 
+            background: rgba(0, 0, 0, 0.9); padding: 20px; width: 100%; text-align: center; 
+            border-bottom: 2px solid #ff0000; position: relative; z-index: 10; 
+            display: flex; justify-content: space-around; align-items: center;
+        }
+        .logo { font-weight: 900; color: #ff0000; font-size: 1.5rem; text-shadow: 0 0 10px #ff0000; }
+        .nav-link { color: white; text-decoration: none; border: 1px solid #ff0000; padding: 5px 15px; border-radius: 10px; cursor: pointer; }
+
+        .page { display: none; width: 100%; max-width: 1100px; padding: 40px 20px; position: relative; z-index: 10; flex-direction: column; align-items: center; }
+        .active-page { display: flex; }
+
+        /* MÜZİK KARTI */
+        .music-card {
+            background: rgba(30, 0, 0, 0.6); border: 2px solid #ff0000; padding: 30px; 
+            border-radius: 20px; text-align: center; width: 350px; box-shadow: 0 0 30px rgba(255,0,0,0.4);
+        }
+        .album-art {
+            width: 200px; height: 200px; margin: 0 auto 20px; border-radius: 15px;
+            background: url('https://i.ytimg.com/vi/7VnLg5p09p4/maxresdefault.jpg') no-repeat center;
+            background-size: cover; border: 2px solid #ff0000;
+        }
+        .play-btn { 
+            background: #ff0000; color: white; border: none; padding: 15px 30px; 
+            border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; margin-top: 15px;
+        }
+
+        /* BAŞVURU (YAN YANA) */
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; }
+        .card { background: #111; border: 1px solid #ff0000; padding: 20px 5px; border-radius: 15px; text-align: center; }
+        .card h2 { font-size: 1rem; margin-bottom: 10px; }
+        .apply-btn { background: #ff0000; color: white; border: none; padding: 8px; border-radius: 5px; width: 90%; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <canvas id="snow-canvas"></canvas>
+
+    <nav>
+        <div class="logo">TTNİ NETWORK</div>
+        <div>
+            <span class="nav-link" onclick="showPage('music-page')">Müzik</span>
+            <span class="nav-link" onclick="showPage('apply-page')" style="margin-left: 10px;">Başvurular</span>
+        </div>
+    </nav>
+
+    <div id="music-page" class="page active-page">
+        <div class="music-card">
+            <div class="album-art"></div>
+            <h3>DEHA INC.</h3>
+            <p style="color: #888;">911 CARRERA</p>
+            
+            <audio id="track" loop>
+                <source src="911-carrera.mp3"
+            
+            <button class="play-btn" onclick="startMusic()">SESİ AÇ VE OYNAT</button>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.7rem; color: #444;">Ses gelmezse sayfaya bir kez tıkla sonra butona bas.</p>
+    </div>
+
+    <div id="apply-page" class="page">
+        <h2 style="color:#00ff88; margin-bottom: 20px;">YETKİLİ BAŞVURULARI</h2>
+        <div class="grid">
+            <div class="card"><h2 style="color:#00ff88">HELPER</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">GİT</button></div>
+            <div class="card"><h2 style="color:#00d2ff">ACC</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">GİT</button></div>
+            <div class="card"><h2 style="color:#ffbc00">D.REHBER</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">GİT</button></div>
+            <div class="card"><h2 style="color:#ffffff">REHBER</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">GİT</button></div>
+        </div>
+    </div>
+
+    <script>
+        const song = document.getElementById('track');
+
+        function startMusic() {
+            song.play().then(() => {
+                console.log("Müzik başladı!");
+            }).catch(e => {
+                alert("Lütfen önce sayfada herhangi bir yere dokun, sonra butona bas!");
+            });
+        }
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById(id).classList.add('active-page');
+        }
+
+        // Kar Yağışı
+        const canvas = document.getElementById('snow-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
+        class Particle {
+            constructor() { this.init(); }
+            init() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 1; this.speed = Math.random() * 1 + 0.5; }
+            update() { this.y += this.speed; if (this.y > canvas.height) this.y = -10; }
+            draw() { ctx.fillStyle = 'white'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
+        }
+        for (let i = 0; i < 50; i++) particles.push(new Particle());
+        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+        animate();
+    </script>
+</body>
+</html>
