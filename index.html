@@ -3,71 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TTNİ Network | Deha 911</title>
+    <title>TTNİ Network | Live</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* Black & Green Theme */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { 
-            background: #000; color: #00ff88; min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-            -webkit-user-select: none; user-select: none; overflow-x: hidden;
-        }
         
-        #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        body { 
+            background: #000; color: #00ff88; min-height: 100vh; display: flex; 
+            flex-direction: column; align-items: center; overflow-x: hidden;
+            -webkit-user-select: none; user-select: none;
+        }
+
+        /* Video Arka Plan (Live Wallpaper Hissi) */
+        #bg-video {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; z-index: -2; opacity: 0.4; filter: grayscale(1) sepia(1) hue-rotate(90deg);
+        }
+
+        /* Yeşil Kar Efekti (Matrix) */
+        #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
 
         nav { 
-            background: rgba(0, 0, 0, 0.9); padding: 20px; width: 100%; text-align: center; 
+            background: rgba(0, 0, 0, 0.85); padding: 20px; width: 100%; text-align: center; 
             border-bottom: 2px solid #00ff88; position: relative; z-index: 10; 
             display: flex; justify-content: space-around; align-items: center;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
         }
-        .logo { font-weight: 900; color: #00ff88; font-size: 1.5rem; text-shadow: 0 0 15px #00ff88; }
-        .nav-link { color: white; text-decoration: none; border: 1px solid #00ff88; padding: 5px 15px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
-        .nav-link:hover { background: #00ff88; color: black; box-shadow: 0 0 20px #00ff88; }
 
-        /* Online Counter Box */
+        .logo { font-weight: 900; color: #00ff88; font-size: 1.5rem; text-shadow: 0 0 15px #00ff88; }
+
+        /* Online Sayacı */
         .online-box {
             background: rgba(0, 255, 136, 0.1); border: 1px solid #00ff88;
             padding: 5px 15px; border-radius: 20px; color: #00ff88; font-weight: 600;
             font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
         }
         .dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 10px #00ff88; animation: blink 1.5s infinite; }
-
-        /* IP Address Box */
-        .server-ip {
-            margin-top: 20px; padding: 10px 20px; border: 2px dashed #00ff88; border-radius: 10px;
-            cursor: pointer; background: rgba(0, 255, 136, 0.05); transition: 0.3s; z-index: 10;
-        }
-        .server-ip:hover { background: rgba(0, 255, 136, 0.2); transform: scale(1.05); }
-
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+        /* IP Adresi Butonu */
+        .server-ip {
+            margin-top: 25px; padding: 12px 25px; border: 2px dashed #00ff88; border-radius: 12px;
+            cursor: pointer; background: rgba(0, 255, 136, 0.1); transition: 0.3s; z-index: 10;
+            color: #00ff88; font-weight: bold; text-shadow: 0 0 5px #00ff88;
+        }
+        .server-ip:hover { background: rgba(0, 255, 136, 0.3); transform: scale(1.05); }
 
         .page { display: none; width: 100%; max-width: 1100px; padding: 40px 20px; position: relative; z-index: 10; flex-direction: column; align-items: center; }
         .active-page { display: flex; }
 
         .music-card {
-            background: rgba(0, 20, 0, 0.8); border: 2px solid #00ff88; padding: 30px; 
-            border-radius: 20px; text-align: center; width: 350px; box-shadow: 0 0 30px rgba(0,255,136,0.3);
+            background: rgba(0, 15, 0, 0.8); border: 2px solid #00ff88; padding: 35px; 
+            border-radius: 25px; text-align: center; width: 360px; box-shadow: 0 0 40px rgba(0,255,136,0.3);
         }
         .album-art {
-            width: 200px; height: 200px; margin: 0 auto 20px; border-radius: 15px;
+            width: 210px; height: 210px; margin: 0 auto 20px; border-radius: 20px;
             background: url('https://i.ytimg.com/vi/7VnLg5p09p4/maxresdefault.jpg') no-repeat center;
             background-size: cover; border: 2px solid #00ff88;
         }
-        .play-btn { background: #00ff88; color: black; border: none; padding: 20px; border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; margin-top: 15px; transition: 0.3s; }
-        .play-btn:hover { box-shadow: 0 0 25px #00ff88; transform: translateY(-3px); }
 
-        .info-trigger { margin-top: 40px; cursor: pointer; color: #00ff88; font-weight: 900; text-decoration: underline; letter-spacing: 1px; }
+        .play-btn { background: #00ff88; color: black; border: none; padding: 18px; border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; margin-top: 20px; transition: 0.4s; }
+        .play-btn:hover { box-shadow: 0 0 30px #00ff88; transform: translateY(-3px); }
 
-        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; }
-        .card { background: #050505; border: 1px solid #00ff88; padding: 20px 5px; border-radius: 15px; text-align: center; box-shadow: 0 0 10px rgba(0,255,136,0.1); }
-        .apply-btn { background: #00ff88; color: black; border: none; padding: 8px; border-radius: 5px; width: 90%; cursor: pointer; font-weight: bold; }
-        
-        #player-video { display: none; }
+        /* Başvurular */
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; width: 100%; }
+        .card { background: rgba(0, 0, 0, 0.9); border: 1px solid #00ff88; padding: 25px 10px; border-radius: 15px; text-align: center; }
+        .apply-btn { background: #00ff88; color: black; border: none; padding: 10px; border-radius: 8px; width: 90%; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body oncontextmenu="return false;">
+
+    <video id="bg-video" autoplay muted loop playsinline>
+        <source src="Anime girl eyes rose bloom 4k Live Wallpaper.mp4" type="video/mp4">
+    </video>
 
     <canvas id="snow-canvas"></canvas>
 
@@ -92,73 +101,36 @@
             <div class="album-art"></div>
             <h3>DEHA INC.</h3>
             <p style="color: #00ff88; opacity: 0.7;">911 CARRERA</p>
-            <video id="player-video" loop>
-                <source src="911 CARRERA - DEHA INC. (Official Music Video).mp4" type="video/mp4">
-            </video>
-            <button class="play-btn" id="btn-text" onclick="startControl()">PLAY SONG</button>
+            <button class="play-btn" id="btn-text" onclick="startControl()">PLAY LIVE</button>
         </div>
-        <p class="info-trigger" onclick="showInfo()">ABOUT TTNİ</p>
     </div>
 
     <div id="apply-page" class="page">
-        <h2 style="color:#00ff88; margin-bottom: 20px; text-shadow: 0 0 10px #00ff88;">APPLICATIONS</h2>
+        <h2 style="color:#00ff88; margin-bottom: 20px;">APPLICATIONS</h2>
         <div class="grid">
-            <div class="card"><h2 style="color:#00ff88">HELPER</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">APPLY</button></div>
-            <div class="card"><h2 style="color:#00d2ff">ACC</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">APPLY</button></div>
-            <div class="card"><h2 style="color:#ffbc00">TRAINEE</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">APPLY</button></div>
-            <div class="card"><h2 style="color:#ffffff">GUIDE</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">APPLY</button></div>
+            <div class="card"><h2>HELPER</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">APPLY</button></div>
+            <div class="card"><h2>ACC</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">APPLY</button></div>
+            <div class="card"><h2>TRAINEE</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">APPLY</button></div>
+            <div class="card"><h2>GUIDE</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">APPLY</button></div>
         </div>
     </div>
 
     <script>
-        // 1. ONLINE PLAYER COUNTER (Max 50)
+        // 1. ONLINE PLAYER (Max 50)
         function updatePlayerCount() {
-            // Generates random number between 15 and 50
-            const count = Math.floor(Math.random() * (50 - 15 + 1)) + 15;
+            const count = Math.floor(Math.random() * (50 - 10 + 1)) + 10;
             document.getElementById('player-count').innerText = count;
         }
         updatePlayerCount();
         setInterval(updatePlayerCount, 60000);
 
-        // 2. IP COPY FUNCTION
+        // 2. IP COPY
         function copyIP() {
             navigator.clipboard.writeText("play.credos.qzz.io");
-            Swal.fire({ title: 'Copied!', text: 'Server IP copied to clipboard.', icon: 'success', background: '#000', color: '#00ff88', confirmButtonColor: '#00ff88' });
+            Swal.fire({ title: 'Copied!', icon: 'success', background: '#000', color: '#00ff88', confirmButtonColor: '#00ff88' });
         }
 
-        // 3. SECURITY
-        document.onkeydown = function(e) {
-            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && [73, 74].includes(e.keyCode)) || (e.ctrlKey && e.keyCode == 85)) return false;
-        };
-
-        const v = document.getElementById('player-video');
-        const t = document.getElementById('btn-text');
-
-        function startControl() {
-            if (v.paused) {
-                v.play().then(() => t.innerText = "PAUSE SONG")
-                .catch(() => Swal.fire({ icon: 'error', title: 'Error', text: 'File not found!', background: '#000', color: '#00ff88' }));
-            } else {
-                v.pause();
-                t.innerText = "RESUME SONG";
-            }
-        }
-
-        function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.getElementById(id).classList.add('active-page');
-        }
-
-        function showInfo() {
-            Swal.fire({
-                title: 'TTNİ Profile',
-                background: '#050505', color: '#00ff88',
-                html: '<b>Mete Turk (TTNİ)</b><br>Age: 11<br>IP: play.credos.qzz.io',
-                confirmButtonColor: '#00ff88'
-            });
-        }
-
-        // 4. GREEN SNOW ANIMATION
+        // 3. GREEN MATRIX SNOW
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -167,20 +139,17 @@
         resize();
         class Particle {
             constructor() { this.init(); }
-            init() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 1; this.speed = Math.random() * 1 + 0.5; }
+            init() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 1; this.speed = Math.random() * 1.5 + 0.5; }
             update() { this.y += this.speed; if (this.y > canvas.height) this.y = -10; }
-            draw() { 
-                ctx.fillStyle = '#00ff88'; // Green Snow
-                ctx.shadowBlur = 5;
-                ctx.shadowColor = '#00ff88';
-                ctx.beginPath(); 
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); 
-                ctx.fill(); 
-            }
+            draw() { ctx.fillStyle = '#00ff88'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
         }
-        for (let i = 0; i < 60; i++) particles.push(new Particle());
+        for (let i = 0; i < 70; i++) particles.push(new Particle());
         function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
         animate();
+
+        // 4. SECURITY & PAGES
+        document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && [73, 74].includes(e.keyCode)) || (e.ctrlKey && e.keyCode == 85)) return false; };
+        function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); }
     </script>
 </body>
 </html>
