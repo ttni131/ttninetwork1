@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TTNİ Network | Live</title>
+    <title>TTNİ Network | Live Audio</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -15,13 +15,12 @@
             -webkit-user-select: none; user-select: none;
         }
 
-        /* Video Background (Live Wallpaper) */
+        /* Video Background */
         #bg-video {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover; z-index: -2; opacity: 0.4; filter: grayscale(1) sepia(1) hue-rotate(90deg);
         }
 
-        /* Green Snow Effect (Matrix Style) */
         #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
 
         nav { 
@@ -33,7 +32,6 @@
 
         .logo { font-weight: 900; color: #00ff88; font-size: 1.5rem; text-shadow: 0 0 15px #00ff88; }
 
-        /* Online Counter */
         .online-box {
             background: rgba(0, 255, 136, 0.1); border: 1px solid #00ff88;
             padding: 5px 15px; border-radius: 20px; color: #00ff88; font-weight: 600;
@@ -42,13 +40,11 @@
         .dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; box-shadow: 0 0 10px #00ff88; animation: blink 1.5s infinite; }
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-        /* IP Address Button */
         .server-ip {
             margin-top: 25px; padding: 12px 25px; border: 2px dashed #00ff88; border-radius: 12px;
             cursor: pointer; background: rgba(0, 255, 136, 0.1); transition: 0.3s; z-index: 10;
             color: #00ff88; font-weight: bold; text-shadow: 0 0 5px #00ff88;
         }
-        .server-ip:hover { background: rgba(0, 255, 136, 0.3); transform: scale(1.05); }
 
         .page { display: none; width: 100%; max-width: 1100px; padding: 40px 20px; position: relative; z-index: 10; flex-direction: column; align-items: center; }
         .active-page { display: flex; }
@@ -66,7 +62,6 @@
         .play-btn { background: #00ff88; color: black; border: none; padding: 18px; border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; margin-top: 20px; transition: 0.4s; }
         .play-btn:hover { box-shadow: 0 0 30px #00ff88; transform: translateY(-3px); }
 
-        /* Applications Grid */
         .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; width: 100%; }
         .card { background: rgba(0, 0, 0, 0.9); border: 1px solid #00ff88; padding: 25px 10px; border-radius: 15px; text-align: center; }
         .apply-btn { background: #00ff88; color: black; border: none; padding: 10px; border-radius: 8px; width: 90%; cursor: pointer; font-weight: bold; }
@@ -116,7 +111,7 @@
     </div>
 
     <script>
-        // 1. ONLINE PLAYER (Max 50)
+        // Online Player Logic (Max 50)
         function updatePlayerCount() {
             const count = Math.floor(Math.random() * (50 - 15 + 1)) + 15;
             document.getElementById('player-count').innerText = count;
@@ -124,13 +119,31 @@
         updatePlayerCount();
         setInterval(updatePlayerCount, 60000);
 
-        // 2. IP COPY
         function copyIP() {
             navigator.clipboard.writeText("play.credos.qzz.io");
             Swal.fire({ title: 'Copied!', icon: 'success', background: '#000', color: '#00ff88', confirmButtonColor: '#00ff88' });
         }
 
-        // 3. GREEN MATRIX SNOW
+        const v = document.getElementById('bg-video');
+        const t = document.getElementById('btn-text');
+
+        // SESİ VE VİDEOYU BAŞLATMA FONKSİYONU
+        function startControl() {
+            if (v.paused) {
+                v.muted = false; // Sesi açar
+                v.play().then(() => {
+                    t.innerText = "STOP SONG";
+                }).catch((error) => {
+                    console.log("Ses çalma hatası:", error);
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'Video file not found or corrupted!', background: '#000', color: '#00ff88' });
+                });
+            } else {
+                v.pause();
+                t.innerText = "RESUME SONG";
+            }
+        }
+
+        // Snow Animation
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -147,24 +160,6 @@
         function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
         animate();
 
-        // 4. MUSIC CONTROL
-        const v = document.getElementById('bg-video');
-        const t = document.getElementById('btn-text');
-
-        function startControl() {
-            if (v.paused) {
-                v.play().then(() => {
-                    t.innerText = "STOP SONG";
-                }).catch(() => {
-                    Swal.fire({ icon: 'error', title: 'Error', text: 'Video file not found!', background: '#000', color: '#00ff88' });
-                });
-            } else {
-                v.pause();
-                t.innerText = "RESUME SONG";
-            }
-        }
-
-        // 5. SECURITY & PAGES
         document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && [73, 74].includes(e.keyCode)) || (e.ctrlKey && e.keyCode == 85)) return false; };
         function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); }
     </script>
