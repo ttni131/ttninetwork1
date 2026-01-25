@@ -1,160 +1,111 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TTNİ Network | Official</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        /* Black & Matrix Green Theme */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { 
-            background: #000; color: #00ff88; min-height: 100vh; display: flex; 
-            flex-direction: column; align-items: center; overflow-x: hidden;
-            -webkit-user-select: none; user-select: none;
-        }
+const { Client, GatewayIntentBits } = require('discord.js');
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const express = require('express');
+const app = express();
 
-        /* Live Video Background - Autoplay Etkin */
-        #bg-video {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; z-index: -2; opacity: 0.4; filter: grayscale(1) sepia(1) hue-rotate(90deg);
-        }
+app.use(express.json());
 
-        /* Green Snow Canvas */
-        #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
-
-        nav { 
-            background: rgba(0, 0, 0, 0.85); padding: 20px; width: 100%; text-align: center; 
-            border-bottom: 2px solid #00ff88; position: relative; z-index: 10; 
-            display: flex; justify-content: space-around; align-items: center;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
-        }
-        .logo { font-weight: 900; color: #00ff88; font-size: 1.5rem; text-shadow: 0 0 15px #00ff88; }
-
-        /* Server IP */
-        .server-ip {
-            margin-top: 25px; padding: 12px 25px; border: 2px dashed #00ff88; border-radius: 12px;
-            cursor: pointer; background: rgba(0, 255, 136, 0.1); transition: 0.3s; z-index: 10;
-            color: #00ff88; font-weight: bold; text-shadow: 0 0 5px #00ff88;
-        }
-        .server-ip:hover { background: rgba(0, 255, 136, 0.3); transform: scale(1.05); }
-
-        .page { display: none; width: 100%; max-width: 1100px; padding: 40px 20px; position: relative; z-index: 10; flex-direction: column; align-items: center; }
-        .active-page { display: flex; }
-
-        .music-card {
-            background: rgba(0, 15, 0, 0.85); border: 2px solid #00ff88; padding: 35px; 
-            border-radius: 25px; text-align: center; width: 360px; box-shadow: 0 0 40px rgba(0,255,136,0.3);
-        }
-        .album-art {
-            width: 210px; height: 210px; margin: 0 auto 20px; border-radius: 20px;
-            background: url('https://i.ytimg.com/vi/7VnLg5p09p4/maxresdefault.jpg') no-repeat center;
-            background-size: cover; border: 2px solid #00ff88;
-        }
-
-        .play-btn { background: #00ff88; color: black; border: none; padding: 18px; border-radius: 50px; cursor: pointer; font-weight: 900; width: 100%; margin-top: 20px; transition: 0.4s; }
-        .play-btn:hover { box-shadow: 0 0 30px #00ff88; transform: translateY(-3px); }
-
-        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; width: 100%; }
-        .card { background: rgba(0, 0, 0, 0.9); border: 1px solid #00ff88; padding: 25px 10px; border-radius: 15px; text-align: center; }
-        .nav-link { color: white; text-decoration: none; border: 1px solid #00ff88; padding: 5px 15px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
-        .nav-link:hover { background: #00ff88; color: black; }
-        .apply-btn { background: #00ff88; color: black; border: none; padding: 10px; border-radius: 8px; width: 90%; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-    </style>
-</head>
-<body oncontextmenu="return false;">
-
-    <video id="bg-video" autoplay muted loop playsinline>
-        <source src="Anime girl eyes rose bloom 4k Live Wallpaper.mp4" type="video/mp4">
-    </video>
-
-    <audio id="main-audio" loop>
-        <source src="911 CARRERA - DEHA INC. (Official Music Video).mp4" type="audio/mpeg">
-    </audio>
-
-    <canvas id="snow-canvas"></canvas>
-
-    <nav>
-        <div class="logo">TTNİ NETWORK</div>
-        <div>
-            <span class="nav-link" onclick="showPage('music-page')">Music</span>
-            <span class="nav-link" onclick="showPage('apply-page')" style="margin-left: 10px;">Applications</span>
+// --- [ WEB ARAYÜZÜ - HACKER TERMINAL ] ---
+app.get('/', (req, res) => {
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="tr">
+    <head>
+        <meta charset="UTF-8">
+        <title>TTNI | MAINFRAME</title>
+        <style>
+            body { background: #000; color: #0f0; font-family: 'Consolas', monospace; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+            #terminal { width: 90%; max-width: 1100px; height: 600px; border: 2px solid #0f0; padding: 20px; overflow-y: auto; background: #050505; box-shadow: 0 0 20px #0f0; }
+            #input-area { width: 90%; max-width: 1100px; margin-top: 20px; display: flex; gap: 10px; }
+            input { flex: 1; background: #000; border: 1px solid #0f0; color: #0f0; padding: 15px; outline: none; font-size: 18px; }
+            button { background: #0f0; color: #000; border: none; padding: 0 30px; cursor: pointer; font-weight: bold; }
+            pre { white-space: pre-wrap; word-wrap: break-word; background: #0a0a0a; padding: 15px; border: 1px solid #111; color: #00ff41; font-size: 14px; margin: 15px 0; border-left: 4px solid #0f0; }
+            .user-tag { color: #fff; font-weight: bold; margin-top: 15px; }
+            .loading { color: yellow; }
+        </style>
+    </head>
+    <body>
+        <h1 style="text-shadow: 0 0 10px #0f0;">[ TTNI_V0.3_PROTOCOL ]</h1>
+        <div id="terminal">
+            <div>>>> SISTEM HAZIR. TÜM KODLAMA DILLERINDE TAM DESTEK AKTIF.</div>
+            <div>>>> PYTHON, HTML, JS, C++, APP DEVELOPER MODU ONAYLANDI.</div>
         </div>
-    </nav>
-
-    <div class="server-ip" onclick="copyIP()">
-        IP: play.credos.qzz.io (Click to Copy)
-    </div>
-
-    <div id="music-page" class="page active-page">
-        <div class="music-card">
-            <div class="album-art"></div>
-            <h3>DEHA INC.</h3>
-            <p style="color: #00ff88; opacity: 0.7;">911 CARRERA</p>
-            <button class="play-btn" id="btn-text" onclick="startControl()">START SONG</button>
+        <div id="input-area">
+            <input type="text" id="userInp" placeholder="Komutunuzu girin (Örn: Tam bir e-ticaret sitesi yap)..." onkeypress="if(event.key==='Enter') send()">
+            <button onclick="send()">RUN</button>
         </div>
-    </div>
 
-    <div id="apply-page" class="page">
-        <h2 style="color:#00ff88; margin-bottom: 20px;">APPLICATIONS</h2>
-        <div class="grid">
-            <div class="card"><h2>HELPER</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">APPLY</button></div>
-            <div class="card"><h2>ACC</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">APPLY</button></div>
-            <div class="card"><h2>TRAINEE</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">APPLY</button></div>
-            <div class="card"><h2>GUIDE</h2><button class="apply-btn" onclick="window.open('https://discord.gg/2WeVDbP8')">APPLY</button></div>
-        </div>
-    </div>
+        <script>
+            async function send() {
+                const inp = document.getElementById('userInp');
+                const term = document.getElementById('terminal');
+                if(!inp.value) return;
 
-    <script>
-        const video = document.getElementById('bg-video');
-        const audio = document.getElementById('main-audio');
-        const btnText = document.getElementById('btn-text');
+                const val = inp.value;
+                term.innerHTML += '<div class="user-tag">KULLANICI: ' + val + '</div>';
+                const loadId = "L-" + Date.now();
+                term.innerHTML += '<div id="'+loadId+'" class="loading">>>> TTNI VERI ANALIZI YAPIYOR, TÜM KODLARI HAZIRLIYOR...</div>';
+                inp.value = '';
+                term.scrollTop = term.scrollHeight;
 
-        // Video sayfa açılır açılmaz çalışsın
-        window.onload = function() {
-            video.play().catch(e => console.log("Otomatik oynatma engellendi: ", e));
-        };
-
-        // Müzik Kontrolü (Video artık bundan bağımsız sürekli çalışır)
-        function startControl() {
-            if (audio.paused) {
-                audio.play().catch(e => console.log("Audio Error"));
-                btnText.innerText = "STOP SONG";
-            } else {
-                audio.pause();
-                btnText.innerText = "RESUME SONG";
+                try {
+                    const res = await fetch('/chat', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({prompt: val})
+                    });
+                    const data = await res.json();
+                    document.getElementById(loadId).remove();
+                    term.innerHTML += '<div><pre>TTNI_RESULT:\n' + data.text + '</pre></div>';
+                } catch (err) {
+                    document.getElementById(loadId).innerHTML = ">>> [HATA]: SUNUCU BAGLANTISI KESILDI! REPLIT'TE 'RUN'A BASTIGINDAN EMIN OL.";
+                }
+                term.scrollTop = term.scrollHeight;
             }
-        }
+        </script>
+    </body>
+    </html>
+  `);
+});
 
-        // Copy IP
-        function copyIP() {
-            navigator.clipboard.writeText("play.credos.qzz.io");
-            Swal.fire({ title: 'Copied!', icon: 'success', background: '#000', color: '#00ff88', confirmButtonColor: '#00ff88' });
-        }
+// --- [ GEMINI AI AYARLARI ] ---
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_KEY);
+const model = genAI.getGenerativeModel({ 
+    model: "gemini-1.5-flash",
+    systemInstruction: `Senin adın TTNI. 
+    1. Sen bir kodlama dehasısın. 
+    2. Python, HTML, CSS, JavaScript, C++, C# ve tüm uygulama dillerinde uzmansın.
+    3. Kullanıcı senden bir şey istediğinde asla 'işte bir parça' veya 'özetle şöyle' demezsin. 
+    4. Kodun EN BAŞINDAN (importlardan) EN SONUNA (çalıştırma satırına) kadar tüm dosyayı eksiksiz verirsin. 
+    5. Eğer bir web sitesi istenirse HTML, CSS ve JS kodlarını ayrı ayrı veya tek bir tam dosya olarak kusursuzca sunarsın.
+    6. Cevapların çok detaylı ve tam profesyonel seviyede olmalıdır.`
+});
 
-        // Green Matrix Snow
-        const canvas = document.getElementById('snow-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize);
-        resize();
-        class Particle {
-            constructor() { this.init(); }
-            init() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 1; this.speed = Math.random() * 1.5 + 0.5; }
-            update() { this.y += this.speed; if (this.y > canvas.height) this.y = -10; }
-            draw() { ctx.fillStyle = '#00ff88'; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
-        }
-        for (let i = 0; i < 75; i++) particles.push(new Particle());
-        function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
-        animate();
+app.post('/chat', async (req, res) => {
+    try {
+        const result = await model.generateContent(req.body.prompt);
+        const response = await result.response;
+        res.json({ text: response.text() });
+    } catch (err) {
+        res.json({ text: "API HATASI: Gemini anahtarını kontrol et knk!" });
+    }
+});
 
-        // Security
-        document.onkeydown = e => { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && [73, 74].includes(e.keyCode)) || (e.ctrlKey && e.keyCode == 85)) return false; };
-        function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page')); document.getElementById(id).classList.add('active-page'); }
-    </script>
-</body>
-</html>
+app.listen(3000);
+
+// --- [ DISCORD BOTU ] ---
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+client.on('messageCreate', async (m) => {
+    if (m.author.bot || !m.content.startsWith('!ttni')) return;
+    try {
+        m.channel.sendTyping();
+        const r = await model.generateContent(m.content.slice(6));
+        const res = await r.response;
+        const txt = res.text();
+        if (txt.length > 1900) {
+            const chunks = txt.match(/[\s\S]{1,1900}/g);
+            for (const c of chunks) await m.reply("```fix\n" + c + "\n```");
+        } else { await m.reply("```fix\n" + txt + "\n```"); }
+    } catch (e) { m.reply("Sistem Meşgul!"); }
+});
+client.login(process.env.TOKEN);
