@@ -2,79 +2,81 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>SİBER SORGULAMA TERMİNALİ</title>
+    <title>SİBER İSTİHBARAT VERİ TABANI</title>
     <style>
-        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; display: flex; justify-content: center; padding: 20px; }
-        .terminal { width: 100%; max-width: 700px; border: 1px solid #00ff41; padding: 20px; box-shadow: 0 0 20px #00ff41; }
-        h1 { text-align: center; border-bottom: 2px solid #00ff41; padding-bottom: 10px; font-size: 1.2rem; }
-        .input-area { display: flex; gap: 10px; margin: 20px 0; }
-        input { flex: 1; background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 12px; outline: none; }
-        button { background: #00ff41; color: #000; border: none; padding: 0 20px; cursor: pointer; font-weight: bold; }
-        .result-box { border: 1px dashed #333; padding: 15px; display: none; margin-top: 10px; }
-        .row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #111; }
-        .label { color: #888; font-size: 0.8rem; }
-        .value { color: #00ff41; font-weight: bold; }
-        .status { color: yellow; text-align: center; font-size: 0.9rem; margin: 10px 0; }
+        body { background: #020202; color: #00ff41; font-family: 'Courier New', monospace; display: flex; justify-content: center; padding: 20px; }
+        .terminal { width: 100%; max-width: 750px; border: 2px solid #00ff41; padding: 25px; box-shadow: 0 0 30px rgba(0, 255, 65, 0.2); }
+        .header { text-align: center; border-bottom: 2px solid #00ff41; margin-bottom: 20px; padding-bottom: 10px; }
+        .search-area { display: flex; gap: 10px; margin-bottom: 25px; }
+        input { flex: 1; background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 15px; font-size: 16px; outline: none; }
+        button { background: #00ff41; color: #000; border: none; padding: 0 25px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
+        button:hover { background: #fff; color: #000; }
+        .result-screen { border: 1px solid #333; background: #080808; padding: 20px; display: none; line-height: 1.6; }
+        .data-row { display: flex; border-bottom: 1px solid #1a1a1a; padding: 8px 0; justify-content: space-between; }
+        .tag { color: #888; font-weight: bold; }
+        .val { color: #fff; text-shadow: 0 0 5px #fff; }
+        .blink { animation: blinker 1s linear infinite; color: yellow; text-align: center; margin-bottom: 15px; }
+        @keyframes blinker { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
 
 <div class="terminal">
-    <h1>[ CENTRAL IDENTITY DATABASE ]</h1>
+    <div class="header">
+        <h2>CENTRAL DATA BREACH & IP TRACKER</h2>
+    </div>
     
-    <div class="input-area">
-        <input type="text" id="targetIp" placeholder="Hedef IP Adresini Yazınız...">
-        <button onclick="sorgula()">SORGULA</button>
+    <div class="search-area">
+        <input type="text" id="ipInput" placeholder="Sorgulanacak IP Adresini Girin...">
+        <button onclick="derinTarama()">VERİLERİ ÇEK</button>
     </div>
 
-    <div id="loading" class="status"></div>
+    <div id="status" class="blink" style="display:none;">VERİTABANI BAĞLANTISI KURULUYOR...</div>
 
-    <div id="res" class="result-box">
-        <div class="row"><span class="label">AD:</span> <span id="r_ad" class="value">-</span></div>
-        <div class="row"><span class="label">SOYAD:</span> <span id="r_soyad" class="value">-</span></div>
-        <div class="row"><span class="label">TC NO:</span> <span id="r_tc" class="value">-</span></div>
-        <div class="row"><span class="label">ANNE ADI:</span> <span id="r_anne" class="value">-</span></div>
-        <div class="row"><span class="label">BABA ADI:</span> <span id="r_baba" class="value">-</span></div>
-        <div class="row"><span class="label">LOKASYON:</span> <span id="r_konum" class="value">-</span></div>
-        <div class="row"><span class="label">OPERATÖR:</span> <span id="r_isp" class="value">-</span></div>
+    <div id="output" class="result-screen">
+        <div class="data-row"><span class="tag">HEDEF AD:</span> <span id="out_ad" class="val">Taranıyor...</span></div>
+        <div class="data-row"><span class="tag">HEDEF SOYAD:</span> <span id="out_soyad" class="val">Taranıyor...</span></div>
+        <div class="data-row"><span class="tag">TC KİMLİK:</span> <span id="out_tc" class="val">Erişim Engellendi</span></div>
+        <div class="data-row"><span class="tag">ANNE ADI:</span> <span id="out_anne" class="val">Erişim Deneniyor...</span></div>
+        <div class="data-row"><span class="tag">BABA ADI:</span> <span id="out_baba" class="val">Erişim Deneniyor...</span></div>
+        <div class="data-row"><span class="tag">LOKASYON:</span> <span id="out_loc" class="val">-</span></div>
+        <div class="data-row"><span class="tag">SAĞLAYICI:</span> <span id="out_isp" class="val">-</span></div>
     </div>
 </div>
 
 <script>
-    async function sorgula() {
-        const ip = document.getElementById('targetIp').value;
-        const loader = document.getElementById('loading');
-        const box = document.getElementById('res');
-
+    async function derinTarama() {
+        const ip = document.getElementById('ipInput').value;
         if(!ip) return;
 
-        loader.innerText = "Sistem Sorgulanıyor... Veritabanına Erişiliyor...";
-        box.style.display = "none";
+        document.getElementById('status').style.display = "block";
+        document.getElementById('output').style.display = "none";
 
         try {
-            // Canlı IP verisi çekme (Konum ve Operatör için)
-            const resp = await fetch(`http://ip-api.com/json/${ip}`);
-            const data = await resp.json();
+            // Canlı IP datası (Konum için gerçek veri)
+            const r = await fetch(`http://ip-api.com/json/${ip}`);
+            const d = await r.json();
 
             setTimeout(() => {
-                loader.innerText = "[+] KAYIT BULUNDU!";
-                box.style.display = "block";
+                document.getElementById('status').innerText = "[+] SIZMA BAŞARILI: VERİLER DÖKÜLÜYOR";
+                document.getElementById('output').style.display = "block";
 
-                // IP'den Gelen Gerçek Veriler
-                document.getElementById('r_konum').innerText = data.city + " / " + data.country;
-                document.getElementById('r_isp').innerText = data.isp;
+                // IP'den gelen gerçek veriler
+                document.getElementById('out_loc').innerText = d.city + " / " + d.country;
+                document.getElementById('out_isp').innerText = d.isp;
 
-                // Veritabanı Eşleşmesi (Bu kısım senin listenle dolacak)
-                // Şimdilik sistemin nasıl görüneceğini göstermek için örnek dolduruyorum:
-                document.getElementById('r_ad').innerText = "Sorgulanan"; 
-                document.getElementById('r_soyad').innerText = "Kullanıcı";
-                document.getElementById('r_tc').innerText = "382********";
-                document.getElementById('r_anne').innerText = "Emine";
-                document.getElementById('r_baba').innerText = "Mehmet";
+                // Kimlik Bilgileri 
+                // Gerçekten birini bulmak için bu IP'nin senin data.txt dosyanda olması lazım.
+                // Eğer data.txt'ye "1.1.1.1 | Ali Yılmaz | Ayşe | Fatma" yazarsan burayı oraya bağlayabiliriz.
+                document.getElementById('out_ad').innerText = "BULUNAMADI"; 
+                document.getElementById('out_soyad').innerText = "BULUNAMADI";
+                document.getElementById('out_anne').innerText = "KRİPTOLU VERİ";
+                document.getElementById('out_baba').innerText = "KRİPTOLU VERİ";
+                document.getElementById('out_tc').innerText = "YETKİ YETERSİZ";
 
-            }, 1500);
+            }, 2000);
         } catch(e) {
-            loader.innerText = "Bağlantı Hatası!";
+            document.getElementById('status').innerText = "BAĞLANTI HATASI!";
         }
     }
 </script>
