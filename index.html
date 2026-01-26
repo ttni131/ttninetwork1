@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>MardiumMC | Neon World</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="neon-wrapper">
+        <header>
+            <h1 class="neon-text">MARDIUM<span>MC</span></h1>
+        </header>
+
+        <section id="info" class="section">
+            <h2 class="neon-blue">SUNUCU BİLGİLERİ</h2>
+            <div class="info-grid">
+                <div class="info-card neon-border-gold" onclick="copyIp()">
+                    <i class="fas fa-network-wired"></i>
+                    <h3>SUNUCU ADRESİ</h3>
+                    <p id="ipText">play.mardiummc.com</p>
+                    <span class="click-hint">Tıkla ve Kopyala!</span>
+                </div>
+                
+                <div class="info-card neon-border-red">
+                    <i class="fas fa-shield-virus"></i>
+                    <h3>HİLE KORUMASI</h3>
+                    <p>Ultra Anti-Cheat Aktif</p>
+                </div>
+
+                <div class="info-card neon-border-green">
+                    <i class="fas fa-clock"></i>
+                    <h3>7/24 AKTİFLİK</h3>
+                    <p>Kesintisiz Oyun Keyfi</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="staff" class="section">
+            <h2 class="neon-purple">YETKİLİ KADROMUZ</h2>
+            <div class="staff-grid">
+                <div class="staff-card">
+                    <div class="rank owner">KURUCU</div>
+                    <h3>Nexorz</h3>
+                    <p>En İyi Başkan</p>
+                </div>
+                <div class="staff-card">
+                    <div class="rank co-owner">2. BAŞKAN</div>
+                    <h3>Druhtu</h3>
+                    <p>En İyi Yardımcı</p>
+                </div>
+                <div class="staff-card">
+                    <div class="rank staff-new">YENİ YETKİLİ</div>
+                    <h3>ttni</h3>
+                    <p>Başlangıç Yetkilisi</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="toast">IP Kopyalandı!</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
