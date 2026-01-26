@@ -2,82 +2,87 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>SİBER İSTİHBARAT VERİ TABANI</title>
+    <title>SİBER VERİ MERKEZİ</title>
     <style>
-        body { background: #020202; color: #00ff41; font-family: 'Courier New', monospace; display: flex; justify-content: center; padding: 20px; }
-        .terminal { width: 100%; max-width: 750px; border: 2px solid #00ff41; padding: 25px; box-shadow: 0 0 30px rgba(0, 255, 65, 0.2); }
-        .header { text-align: center; border-bottom: 2px solid #00ff41; margin-bottom: 20px; padding-bottom: 10px; }
-        .search-area { display: flex; gap: 10px; margin-bottom: 25px; }
-        input { flex: 1; background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 15px; font-size: 16px; outline: none; }
-        button { background: #00ff41; color: #000; border: none; padding: 0 25px; cursor: pointer; font-weight: bold; text-transform: uppercase; }
-        button:hover { background: #fff; color: #000; }
-        .result-screen { border: 1px solid #333; background: #080808; padding: 20px; display: none; line-height: 1.6; }
-        .data-row { display: flex; border-bottom: 1px solid #1a1a1a; padding: 8px 0; justify-content: space-between; }
-        .tag { color: #888; font-weight: bold; }
-        .val { color: #fff; text-shadow: 0 0 5px #fff; }
-        .blink { animation: blinker 1s linear infinite; color: yellow; text-align: center; margin-bottom: 15px; }
-        @keyframes blinker { 50% { opacity: 0; } }
+        body { background: #000; color: #00ff41; font-family: 'Courier New', monospace; display: flex; justify-content: center; padding: 20px; }
+        .terminal { width: 100%; max-width: 700px; border: 2px solid #00ff41; padding: 20px; box-shadow: 0 0 20px #00ff41; }
+        .input-group { display: flex; gap: 10px; margin: 20px 0; }
+        input { flex: 1; background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 12px; outline: none; }
+        button { background: #00ff41; color: #000; border: none; padding: 0 20px; cursor: pointer; font-weight: bold; }
+        .res-box { border: 1px solid #222; background: #050505; padding: 15px; display: none; }
+        .line { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #111; }
+        .key { color: #888; font-size: 13px; }
+        .val { color: #fff; font-weight: bold; }
+        .loading { color: yellow; text-align: center; margin: 10px 0; display: none; }
     </style>
 </head>
 <body>
 
 <div class="terminal">
-    <div class="header">
-        <h2>CENTRAL DATA BREACH & IP TRACKER</h2>
-    </div>
+    <h2 style="text-align: center;">CENTRAL DATABASE ACCESS</h2>
     
-    <div class="search-area">
-        <input type="text" id="ipInput" placeholder="Sorgulanacak IP Adresini Girin...">
-        <button onclick="derinTarama()">VERİLERİ ÇEK</button>
+    <div class="input-group">
+        <input type="text" id="ip" placeholder="Hedef IP Giriniz...">
+        <button onclick="sorgula()">VERİLERİ ÇEK</button>
     </div>
 
-    <div id="status" class="blink" style="display:none;">VERİTABANI BAĞLANTISI KURULUYOR...</div>
+    <div id="loader" class="loading">SİSTEME SIZILIYOR...</div>
 
-    <div id="output" class="result-screen">
-        <div class="data-row"><span class="tag">HEDEF AD:</span> <span id="out_ad" class="val">Taranıyor...</span></div>
-        <div class="data-row"><span class="tag">HEDEF SOYAD:</span> <span id="out_soyad" class="val">Taranıyor...</span></div>
-        <div class="data-row"><span class="tag">TC KİMLİK:</span> <span id="out_tc" class="val">Erişim Engellendi</span></div>
-        <div class="data-row"><span class="tag">ANNE ADI:</span> <span id="out_anne" class="val">Erişim Deneniyor...</span></div>
-        <div class="data-row"><span class="tag">BABA ADI:</span> <span id="out_baba" class="val">Erişim Deneniyor...</span></div>
-        <div class="data-row"><span class="tag">LOKASYON:</span> <span id="out_loc" class="val">-</span></div>
-        <div class="data-row"><span class="tag">SAĞLAYICI:</span> <span id="out_isp" class="val">-</span></div>
+    <div id="res" class="res-box">
+        <div class="line"><span class="key">HEDEF ADI:</span> <span id="r_ad" class="val"></span></div>
+        <div class="line"><span class="key">HEDEF SOYADI:</span> <span id="r_soyad" class="val"></span></div>
+        <div class="line"><span class="key">TC KİMLİK:</span> <span id="r_tc" class="val"></span></div>
+        <div class="line"><span class="key">ANNE ADI:</span> <span id="r_anne" class="val"></span></div>
+        <div class="line"><span class="key">BABA ADI:</span> <span id="r_baba" class="val"></span></div>
+        <div class="line"><span class="key">LOKASYON:</span> <span id="r_loc" class="val"></span></div>
     </div>
 </div>
 
 <script>
-    async function derinTarama() {
-        const ip = document.getElementById('ipInput').value;
-        if(!ip) return;
-
-        document.getElementById('status').style.display = "block";
-        document.getElementById('output').style.display = "none";
-
-        try {
-            // Canlı IP datası (Konum için gerçek veri)
-            const r = await fetch(`http://ip-api.com/json/${ip}`);
-            const d = await r.json();
-
-            setTimeout(() => {
-                document.getElementById('status').innerText = "[+] SIZMA BAŞARILI: VERİLER DÖKÜLÜYOR";
-                document.getElementById('output').style.display = "block";
-
-                // IP'den gelen gerçek veriler
-                document.getElementById('out_loc').innerText = d.city + " / " + d.country;
-                document.getElementById('out_isp').innerText = d.isp;
-
-                // Kimlik Bilgileri 
-                // Gerçekten birini bulmak için bu IP'nin senin data.txt dosyanda olması lazım.
-                // Eğer data.txt'ye "1.1.1.1 | Ali Yılmaz | Ayşe | Fatma" yazarsan burayı oraya bağlayabiliriz.
-                document.getElementById('out_ad').innerText = "BULUNAMADI"; 
-                document.getElementById('out_soyad').innerText = "BULUNAMADI";
-                document.getElementById('out_anne').innerText = "KRİPTOLU VERİ";
-                document.getElementById('out_baba').innerText = "KRİPTOLU VERİ";
-                document.getElementById('out_tc').innerText = "YETKİ YETERSİZ";
-
-            }, 2000);
-        } catch(e) {
-            document.getElementById('status').innerText = "BAĞLANTI HATASI!";
+    // --- BURASI SENİN GERÇEK VERİ TABANIN ---
+    const veritabani = {
+        "31.155.233.10": {
+            ad: "Ahmet",
+            soyad: "Yılmaz",
+            tc: "19234857612",
+            anne: "Ayşe",
+            baba: "Ali",
+            loc: "Gölköy / Türkiye"
+        },
+        "127.0.0.1": {
+            ad: "Admin",
+            soyad: "User",
+            tc: "00000000000",
+            anne: "Havva",
+            baba: "Adem",
+            loc: "Localhost"
         }
+    };
+
+    async function sorgula() {
+        const ip = document.getElementById('ip').value;
+        const loader = document.getElementById('loader');
+        const box = document.getElementById('res');
+
+        loader.style.display = "block";
+        box.style.display = "none";
+
+        setTimeout(() => {
+            loader.style.display = "none";
+            
+            if(veritabani[ip]) {
+                const kisi = veritabani[ip];
+                document.getElementById('r_ad').innerText = kisi.ad;
+                document.getElementById('r_soyad').innerText = kisi.soyad;
+                document.getElementById('r_tc').innerText = kisi.tc;
+                document.getElementById('r_anne').innerText = kisi.anne;
+                document.getElementById('r_baba').innerText = kisi.baba;
+                document.getElementById('r_loc').innerText = kisi.loc;
+                box.style.display = "block";
+            } else {
+                alert("IP Veritabanında Kayıtlı Değil!");
+            }
+        }, 1500);
     }
 </script>
 
