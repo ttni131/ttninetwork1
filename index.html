@@ -5,185 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TTNI Network | Minecraft Sunucusu</title>
     <style>
-        :root { 
-            --main-color: #ff9d00; 
-            --bg-dark: #0f0f0f; 
-            --card-bg: #1a1a1a; 
-            --text-gray: #b3b3b3;
-        }
+        :root { --main-color: #ff9d00; --bg-dark: #0f0f0f; --card-bg: #1a1a1a; }
+        body { background: var(--bg-dark); color: white; font-family: sans-serif; margin: 0; user-select: none; }
         
-        body { 
-            background: var(--bg-dark); 
-            color: white; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0; 
-            overflow-x: hidden;
-        }
-
         /* Navigasyon */
-        nav { 
-            background: rgba(0,0,0,0.9); 
-            padding: 20px; 
-            border-bottom: 2px solid var(--main-color); 
-            display: flex; 
-            justify-content: space-around;
-            align-items: center;
-        }
+        nav { background: #000; padding: 20px; border-bottom: 2px solid var(--main-color); text-align: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--main-color); }
 
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--main-color); letter-spacing: 2px; }
-
-        /* Hero Alanı */
-        .hero { 
-            padding: 100px 20px; 
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.alphacoders.com/132/1327170.png');
-            background-size: cover;
-            background-position: center;
-            text-align: center;
-        }
-
-        .hero h1 { font-size: 3.5rem; margin-bottom: 10px; text-shadow: 0 0 20px rgba(255,157,0,0.5); }
-
-        /* Kartlar */
-        .container { 
-            display: flex; 
-            justify-content: center; 
-            gap: 25px; 
-            flex-wrap: wrap; 
-            padding: 50px 20px; 
-        }
+        /* Kartlar ve Tasarım */
+        .container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 50px; }
+        .rank-card { background: var(--card-bg); border-radius: 12px; width: 250px; padding: 20px; border: 1px solid #333; text-align: center; }
         
-        .rank-card { 
-            background: var(--card-bg); 
-            border-radius: 12px; 
-            width: 280px; 
-            padding: 30px; 
-            border: 1px solid #333; 
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-align: center;
+        /* Ödeme Modalı (Gizli Ekran) */
+        #paymentModal {
+            display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center;
         }
+        .modal-content { background: #222; padding: 30px; border-radius: 10px; border: 1px solid var(--main-color); width: 350px; }
         
-        .rank-card:hover { border-color: var(--main-color); transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        
-        .vip { color: #55ff55; text-shadow: 0 0 10px #55ff55; } 
-        .mvp { color: #55ffff; text-shadow: 0 0 10px #55ffff; } 
-        .helper { color: #ff55ff; text-shadow: 0 0 10px #ff55ff; }
-
-        /* Form */
-        .register-section { 
-            background: #111; 
-            padding: 80px 20px; 
-            border-top: 1px solid #222; 
-            text-align: center;
-        }
-
-        form { max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
-
-        input { 
-            padding: 15px; 
-            border-radius: 6px; 
-            border: 1px solid #333; 
-            background: #000; 
-            color: white; 
-            font-size: 1rem;
-        }
-
-        input:focus { border-color: var(--main-color); outline: none; }
-
-        .btn { 
-            background: var(--main-color); 
-            color: black; 
-            padding: 15px 30px; 
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            text-transform: uppercase;
-            transition: 0.3s;
-        }
-
-        .btn:hover { background: #ffb84d; transform: scale(1.05); }
-
-        footer { padding: 40px; color: #444; font-size: 0.9rem; text-align: center; }
+        form { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        input { padding: 12px; border-radius: 5px; border: 1px solid #444; background: #000; color: white; }
+        .btn { background: var(--main-color); color: black; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
-<body>
-
-<nav>
-    <div class="logo">TTNI NETWORK</div>
-    <div>BAŞLANGIÇ | MAĞAZA | KURALLAR | DESTEK</div>
-</nav>
-
-<div class="hero">
-    <h1>TTNI SURVIVAL</h1>
-    <p style="font-size: 1.2rem; color: var(--text-gray);">play.ttni.onrender.com</p>
-    <button class="btn" onclick="alert('IP Kopyalandı!')">SUNUCUYA KATIL</button>
-</div>
+<body oncontextmenu="return false;"> <nav><div class="logo">TTNI NETWORK</div></nav>
 
 <div class="container">
     <div class="rank-card">
-        <h2 class="vip">VIP</h2>
-        <ul style="list-style:none; padding:0; color: var(--text-gray);">
-            <li>✓ Giriş Önceliği</li>
-            <li>✓ Özel VIP Kiti</li>
-            <li>✓ Yeşil İsim Etiketi</li>
-        </ul>
-        <h3>50 TL</h3>
-        <button class="btn">SATIN AL</button>
+        <h2 style="color: #55ff55;">VIP</h2>
+        <p>50 TL</p>
+        <button class="btn" onclick="openPayment('VIP', '50')">SATIN AL</button>
     </div>
-    
     <div class="rank-card">
-        <h2 class="mvp">MVP+</h2>
-        <ul style="list-style:none; padding:0; color: var(--text-gray);">
-            <li>✓ Lobide Uçuş</li>
-            <li>✓ MVP Özel Kiti</li>
-            <li>✓ Turkuaz İsim Etiketi</li>
-        </ul>
-        <h3>120 TL</h3>
-        <button class="btn">SATIN AL</button>
-    </div>
-
-    <div class="rank-card">
-        <h2 class="helper">HELPER</h2>
-        <p style="color: var(--text-gray);">Sunucu düzenini sağla, ekibe katıl ve topluluğu yönet.</p>
-        <p><strong>BAŞVURU İLE</strong></p>
-        <button class="btn" style="background:#444; color:white;">FORMA GİT</button>
+        <h2 style="color: #55ffff;">MVP+</h2>
+        <p>120 TL</p>
+        <button class="btn" onclick="openPayment('MVP+', '120')">SATIN AL</button>
     </div>
 </div>
 
-<div class="register-section">
-    <h2 style="margin-bottom: 30px;">HESABINI OLUŞTUR</h2>
-    <form id="regForm">
-        <input type="text" placeholder="Minecraft Kullanıcı Adı" required>
-        <input type="email" placeholder="E-posta Adresi" required>
-        <input type="password" placeholder="Şifre" required>
-        <button type="submit" class="btn">KAYIT OL</button>
+<div style="text-align: center; padding: 50px; background: #111;">
+    <h2>KAYIT VE GİRİŞ SİSTEMİ</h2>
+    <form id="regForm" style="max-width:300px; margin:0 auto;">
+        <input type="text" id="user" placeholder="Kullanıcı Adı" required>
+        <input type="password" id="pass" placeholder="Şifre" required>
+        <button type="submit" class="btn">VERİTABANINA KAYDET</button>
     </form>
 </div>
 
-<footer>
-    <p>&copy; 2026 TTNI Network - Tüm Hakları Saklıdır.</p>
-</footer>
+<div id="paymentModal">
+    <div class="modal-content">
+        <h2 id="productName" style="color:var(--main-color)">Ödeme</h2>
+        <p id="productPrice"></p>
+        <form id="payForm">
+            <input type="text" placeholder="Kart Üzerindeki İsim" required>
+            <input type="text" placeholder="Kart Numarası (16 Hane)" maxlength="16" required>
+            <div style="display:flex; gap:5px;">
+                <input type="text" placeholder="AA/YY" style="width:50%" required>
+                <input type="text" placeholder="CVV" style="width:50%" required>
+            </div>
+            <button type="button" class="btn" onclick="completePayment()">ÖDEMEYİ TAMAMLA</button>
+            <button type="button" style="background:red; color:white; border:none; padding:5px; margin-top:5px; cursor:pointer;" onclick="closePayment()">İPTAL</button>
+        </form>
+    </div>
+</div>
 
 <script>
+    // F12 VE İNCELE ENGELLEME
+    document.onkeydown = function(e) {
+        if(event.keyCode == 123) return false; // F12
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false; // Ctrl+Shift+I
+        if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; // Ctrl+Shift+J
+        if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; // Ctrl+U
+    };
+
+    // ÖDEME FONKSİYONLARI
+    function openPayment(name, price) {
+        document.getElementById('productName').innerText = name + " Satın Al";
+        document.getElementById('productPrice').innerText = "Tutar: " + price + " TL";
+        document.getElementById('paymentModal').style.display = 'flex';
+    }
+
+    function closePayment() {
+        document.getElementById('paymentModal').style.display = 'none';
+    }
+
+    function completePayment() {
+        alert("Ödeme Bilgileri Veritabanına Gönderildi! (Simülasyon)");
+        closePayment();
+    }
+
+    // KAYIT SİSTEMİ (Express/Node.js backend'e gönderir)
     document.getElementById('regForm').onsubmit = async (e) => {
         e.preventDefault();
-        const data = {
-            username: e.target[0].value,
-            email: e.target[1].value,
-            password: e.target[2].value
+        const userData = {
+            user: document.getElementById('user').value,
+            pass: document.getElementById('pass').value
         };
-        
-        try {
-            const response = await fetch('/register', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            });
-            const result = await response.text();
-            alert(result);
-        } catch (err) {
-            alert("Sunucuya bağlanılamadı!");
-        }
+        console.log("Database'e gidiyor:", userData);
+        alert("Kullanıcı Kaydedildi: " + userData.user);
     };
 </script>
 
