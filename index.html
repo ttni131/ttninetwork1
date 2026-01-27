@@ -2,64 +2,74 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>MardiumMC | Neon World</title>
+    <title>MardiumMC | Kış Macerası</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <div class="neon-wrapper">
+    <div id="snow"></div>
+
+    <div class="main-content">
         <header>
-            <h1 class="neon-text">MARDIUM<span>MC</span></h1>
+            <h1 class="logo">MARDIUM<span>MC</span></h1>
+            <p class="slogan">Karların Arasında Bir Efsane Doğuyor...</p>
         </header>
 
-        <section id="info" class="section">
-            <h2 class="neon-blue">SUNUCU BİLGİLERİ</h2>
-            <div class="info-grid">
-                <div class="info-card neon-border-gold" onclick="copyIp()">
-                    <i class="fas fa-network-wired"></i>
-                    <h3>SUNUCU ADRESİ</h3>
-                    <p id="ipText">play.mardiummc.com</p>
-                    <span class="click-hint">Tıkla ve Kopyala!</span>
-                </div>
-                
-                <div class="info-card neon-border-red">
-                    <i class="fas fa-shield-virus"></i>
-                    <h3>HİLE KORUMASI</h3>
-                    <p>Ultra Anti-Cheat Aktif</p>
-                </div>
+        <section class="info-section">
+            <div class="card" onclick="copyIp()">
+                <i class="fas fa-copy"></i>
+                <h3>IP ADRESİ</h3>
+                <p>play.mardiummc.com</p>
+                <small>Kopyalamak için tıkla!</small>
+            </div>
+            <div class="card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>HİLE KORUMASI</h3>
+                <p>7/24 Aktif & Güçlü</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-server"></i>
+                <h3>AKTİFLİK</h3>
+                <p>7/24 Kesintisiz</p>
+            </div>
+        </section>
 
-                <div class="info-card neon-border-green">
-                    <i class="fas fa-clock"></i>
-                    <h3>7/24 AKTİFLİK</h3>
-                    <p>Kesintisiz Oyun Keyfi</p>
+        <section class="vote-section">
+            <div class="vote-box">
+                <h2><i class="fas fa-vote-yea"></i> Sunucuya Oy Ver</h2>
+                <p>Oy vererek bize destek ol ve oyun içi ödüller kazan!</p>
+                <div class="vote-links">
+                    <a href="#" class="vote-btn">Minecraft-MP</a>
+                    <a href="#" class="vote-btn">TopG</a>
+                    <a href="#" class="vote-btn">MC-Server-List</a>
                 </div>
             </div>
         </section>
 
-        <section id="staff" class="section">
-            <h2 class="neon-purple">YETKİLİ KADROMUZ</h2>
-            <div class="staff-grid">
-                <div class="staff-card">
-                    <div class="rank owner">KURUCU</div>
-                    <h3>Nexorz</h3>
-                    <p>En İyi Başkan</p>
+        <section class="staff-section">
+            <h2><i class="fas fa-user-shield"></i> Yetkili Kadromuz</h2>
+            <div class="staff-list">
+                <div class="staff-member">
+                    <img src="https://minotar.net/helm/Nexorz/100.png" alt="Nexorz">
+                    <h4>Nexorz</h4>
+                    <span class="rank boss">En İyi Başkan</span>
                 </div>
-                <div class="staff-card">
-                    <div class="rank co-owner">2. BAŞKAN</div>
-                    <h3>Druhtu</h3>
-                    <p>En İyi Yardımcı</p>
+                <div class="staff-member">
+                    <img src="https://minotar.net/helm/Druhtu/100.png" alt="Druhtu">
+                    <h4>Druhtu</h4>
+                    <span class="rank sub-boss">2. Başkan</span>
                 </div>
-                <div class="staff-card">
-                    <div class="rank staff-new">YENİ YETKİLİ</div>
-                    <h3>ttni</h3>
-                    <p>Başlangıç Yetkilisi</p>
+                <div class="staff-member">
+                    <img src="https://minotar.net/helm/ttni/100.png" alt="ttni">
+                    <h4>ttni</h4>
+                    <span class="rank helper">Yeni Yetkili</span>
                 </div>
             </div>
         </section>
     </div>
 
-    <div id="toast">IP Kopyalandı!</div>
+    <div id="notification">IP Başarıyla Kopyalandı! ❄️</div>
 
     <script src="script.js"></script>
 </body>
