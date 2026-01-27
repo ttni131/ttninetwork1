@@ -19,28 +19,17 @@
         </div>
 
         <div class="portal-menu">
-            <a href="javascript:void(0)" onclick="showPage('home')" class="menu-item">
-                <i class="fas fa-home"></i> ANASAYFA
-            </a>
-            <a href="javascript:void(0)" onclick="showPage('games')" class="menu-item">
-                <i class="fas fa-gamepad"></i> OYUNLARIMIZ
-            </a>
-            <a href="javascript:void(0)" onclick="showPage('store')" class="menu-item">
-                <i class="fas fa-shopping-cart"></i> MAĞAZA
-            </a>
-            <a href="https://minecraft-mp.com/server-s353584" target="_blank" class="menu-item vote-btn">
-                <i class="fas fa-check-circle"></i> OY VER
-            </a>
-            <a href="javascript:void(0)" onclick="showPage('staff')" class="menu-item">
-                <i class="fas fa-users"></i> YETKİLİLER
-            </a>
+            <a href="#home" class="menu-item">ANASAYFA</a>
+            <a href="#games" class="menu-item">OYUNLARIMIZ</a>
+            <a href="#store" class="menu-item">MAĞAZA</a>
+            <a href="https://minecraft-mp.com/server-s353584" target="_blank" class="menu-item vote-btn">OY VER</a>
+            <a href="#staff" class="menu-item">YETKİLİLER</a>
         </div>
 
         <div class="content-box">
             
-            <div id="home" class="tab-content active">
+            <section id="home" class="section-padding">
                 <h2>Sunucuya Hoş Geldin!</h2>
-                <p>MardiumMC ile benzersiz bir survival ve topluluk deneyimine hazır ol.</p>
                 <div class="ip-box" onclick="copyIp()">
                     <span id="ip">PLAY.MARDIUMMC.COM</span>
                     <small>Tıkla Kopyala!</small>
@@ -49,63 +38,42 @@
                     <span><i class="fas fa-shield-alt"></i> Hile Koruması: AKTİF</span>
                     <span><i class="fas fa-clock"></i> 7/24 Aktif</span>
                 </div>
-            </div>
+            </section>
 
-            <div id="games" class="tab-content">
-                <h2>Oyun Modlarımız</h2>
+            <hr class="divider">
+
+            <section id="games" class="section-padding">
+                <h2><i class="fas fa-gamepad"></i> Oyun Modlarımız</h2>
                 <div class="game-grid">
-                    <div class="game-card">
-                        <i class="fas fa-city"></i>
-                        <h3>TOWNY</h3>
-                        <p>Kendi krallığını kur ve dünyaya hükmet!</p>
-                    </div>
-                    <div class="game-card">
-                        <i class="fas fa-swords"></i>
-                        <h3>PVP</h3>
-                        <p>En yetenekli savaşçı olduğunu kanıtla.</p>
-                    </div>
-                    <div class="game-card">
-                        <i class="fas fa-cloud"></i>
-                        <h3>SKYBLOCK</h3>
-                        <p>Küçük bir adadan dev bir imparatorluğa.</p>
-                    </div>
+                    <div class="game-card"><h3>TOWNY</h3><p>Krallığını Kur!</p></div>
+                    <div class="game-card"><h3>PVP</h3><p>Arenada Savaş!</p></div>
+                    <div class="game-card"><h3>SKYBLOCK</h3><p>Adanı Büyüt!</p></div>
                 </div>
-            </div>
+            </section>
 
-            <div id="store" class="tab-content">
-                <h2>Mardium Market</h2>
-                <p>VIP ve özel paketler ile maceranı güçlendir.</p>
-                <div class="store-placeholder">
-                    <i class="fas fa-tools"></i>
-                    <p>Mağaza Sistemi Yakında Aktif Edilecektir.</p>
-                </div>
-            </div>
+            <hr class="divider">
 
-            <div id="staff" class="tab-content">
-                <h2>Yönetim Ekibi</h2>
+            <section id="store" class="section-padding">
+                <h2><i class="fas fa-shopping-cart"></i> Mağaza</h2>
+                <p>VIP ve özel paketler yakında burada!</p>
+                <div class="store-placeholder">Sistem Hazırlanıyor...</div>
+            </section>
+
+            <hr class="divider">
+
+            <section id="staff" class="section-padding">
+                <h2><i class="fas fa-users"></i> Yönetim Ekibi</h2>
                 <div class="staff-grid">
-                    <div class="staff-card">
-                        <div class="rank red">1. BAŞKAN</div>
-                        <h3>Nexorz</h3>
-                        <p>En İyi Başkan</p>
-                    </div>
-                    <div class="staff-card">
-                        <div class="rank orange">2. BAŞKAN</div>
-                        <h3>Druhtu</h3>
-                        <p>En İyi 2. Başkan</p>
-                    </div>
-                    <div class="staff-card">
-                        <div class="rank blue">YETKİLİ</div>
-                        <h3>ttni</h3>
-                        <p>Yeni Başlangıç</p>
-                    </div>
+                    <div class="staff-card"><div class="rank red">1. BAŞKAN</div><h3>Nexorz</h3><p>En İyi Başkan</p></div>
+                    <div class="staff-card"><div class="rank orange">2. BAŞKAN</div><h3>Druhtu</h3><p>En İyi 2. Başkan</p></div>
+                    <div class="staff-card"><div class="rank blue">YETKİLİ</div><h3>ttni</h3><p>Yeni Başlangıç</p></div>
                 </div>
-            </div>
+            </section>
 
         </div>
 
         <div class="footer">
-            &copy; 2026 MardiumMC | play.mardiummc.com | Tüm Hakları Saklıdır.
+            &copy; 2026 MardiumMC | play.mardiummc.com
         </div>
     </div>
 
