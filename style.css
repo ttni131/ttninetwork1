@@ -1,43 +1,31 @@
-/* Giriş Ekranı Tasarımı */
-.full-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 9999;
+body {
+    background: url('https://wallpaperaccess.com/full/1163458.jpg') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0; color: white; font-family: 'Trebuchet MS', sans-serif;
 }
 
-.auth-box {
-    background: rgba(20, 20, 20, 0.95);
-    padding: 40px;
-    border-radius: 15px;
-    border: 2px solid #f1c40f;
-    text-align: center;
-    width: 350px;
-    box-shadow: 0 0 30px rgba(241, 196, 15, 0.2);
-}
+#snow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+.snowflake { position: fixed; top: -10px; color: white; animation: fall linear forwards; }
+@keyframes fall { to { transform: translateY(105vh); } }
 
-.input-group {
-    background: #111;
-    margin: 15px 0;
-    padding: 10px;
-    border-radius: 5px;
-    display: flex; align-items: center;
-}
+.main-container { position: relative; z-index: 10; max-width: 1000px; margin: 50px auto; background: rgba(0,0,0,0.8); padding: 30px; border-radius: 15px; text-align: center; border: 1px solid #f1c40f; }
 
-.input-group input {
-    background: transparent; border: none; color: white;
-    padding-left: 10px; width: 100%; outline: none;
-}
+header nav button { background: transparent; border: 1px solid #f1c40f; color: white; padding: 10px 20px; cursor: pointer; margin: 5px; transition: 0.3s; }
+header nav button:hover { background: #f1c40f; color: black; }
 
-.auth-buttons { display: flex; gap: 10px; margin-top: 20px; }
-.btn-login, .btn-register {
-    flex: 1; padding: 12px; border: none; border-radius: 5px;
-    font-weight: bold; cursor: pointer; transition: 0.3s;
-}
+.page { display: none; animation: fadeIn 0.5s; }
+.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-.btn-login { background: #f1c40f; color: black; }
-.btn-register { background: #2ecc71; color: white; }
-.skip-btn { background: none; border: none; color: #555; margin-top: 15px; cursor: pointer; text-decoration: underline; }
+.grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+.item-card, .game-card { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; width: 250px; position: relative; }
 
-/* Kar ve Diğer stiller öncekiyle aynı kalacak */
+.price-tag { background: #f1c40f; color: black; position: absolute; top: 10px; right: -5px; padding: 5px 10px; font-weight: bold; border-radius: 3px; }
+
+.buy-btn { display: block; background: #2ecc71; color: white; text-decoration: none; padding: 12px; margin-top: 15px; border-radius: 5px; font-weight: bold; transition: 0.3s; }
+.buy-btn:hover { background: #27ae60; transform: scale(1.05); }
+
+.vote-btn { display: inline-block; background: #3498db; color: white; text-decoration: none; padding: 15px 30px; border-radius: 5px; font-weight: bold; margin-top: 20px; }
+
+#notif { visibility: hidden; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #2ecc71; padding: 10px 20px; border-radius: 20px; }
+#notif.show { visibility: visible; }
