@@ -1,98 +1,29 @@
-body {
-    background: linear-gradient(to bottom, #1a2a6c, #b21f1f, #fdbb2d); /* Kış akşamı gradyanı */
-    background-attachment: fixed;
-    margin: 0;
-    color: white;
-    font-family: 'Segoe UI', sans-serif;
-    overflow-x: hidden;
+// Kar Yağdırma Efekti
+function createSnow() {
+    const snowContainer = document.getElementById('snow');
+    const snowflake = document.createElement('div');
+    
+    snowflake.classList.add('snowflake');
+    snowflake.innerHTML = '❄';
+    snowflake.style.left = Math.random() * 100 + 'vw';
+    snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+    snowflake.style.opacity = Math.random();
+    snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+    
+    snowContainer.appendChild(snowflake);
+    
+    setTimeout(() => {
+        snowflake.remove();
+    }, 5000);
 }
+setInterval(createSnow, 100);
 
-/* Canlı Kar Efekti */
-#snow {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
+// IP Kopyalama
+function copyIp() {
+    const ip = "play.mardiummc.com";
+    navigator.clipboard.writeText(ip).then(() => {
+        const note = document.getElementById('notification');
+        note.className = "show";
+        setTimeout(() => { note.className = ""; }, 3000);
+    });
 }
-
-.snowflake {
-    position: fixed;
-    top: -10px;
-    color: white;
-    font-size: 1em;
-    user-select: none;
-    z-index: 1000;
-    animation: fall linear forwards;
-}
-
-@keyframes fall {
-    to { transform: translateY(105vh); }
-}
-
-.main-content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    padding: 50px 20px;
-}
-
-.logo { font-size: 4rem; text-shadow: 0 0 20px rgba(255,255,255,0.5); margin-bottom: 5px; }
-.logo span { color: #3498db; }
-
-/* Kartlar */
-.info-section { display: flex; justify-content: center; gap: 20px; margin: 40px 0; flex-wrap: wrap; }
-.card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    padding: 25px;
-    border-radius: 15px;
-    width: 200px;
-    border: 1px solid rgba(255,255,255,0.2);
-    cursor: pointer;
-    transition: 0.3s;
-}
-.card:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.2); }
-
-/* Vote Bölümü */
-.vote-box {
-    background: rgba(0, 0, 0, 0.4);
-    padding: 30px;
-    border-radius: 20px;
-    max-width: 600px;
-    margin: 40px auto;
-}
-.vote-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 10px;
-    background: #3498db;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: 0.3s;
-}
-.vote-btn:hover { background: #2980b9; box-shadow: 0 0 15px #3498db; }
-
-/* Yetkililer */
-.staff-list { display: flex; justify-content: center; gap: 30px; margin-top: 20px; flex-wrap: wrap; }
-.staff-member { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; width: 150px; }
-.staff-member img { border-radius: 10px; margin-bottom: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
-.rank { display: block; font-size: 0.8rem; padding: 5px; border-radius: 5px; margin-top: 5px; }
-.boss { background: #c0392b; }
-.sub-boss { background: #d35400; }
-.helper { background: #27ae60; }
-
-/* Bildirim */
-#notification {
-    visibility: hidden;
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #2ecc71;
-    padding: 15px 30px;
-    border-radius: 50px;
-}
-#notification.show { visibility: visible; animation: fadeInUp 0.5s; }
-@keyframes fadeInUp { from { opacity: 0; bottom: 0; } to { opacity: 1; bottom: 30px; } }
