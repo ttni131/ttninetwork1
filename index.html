@@ -2,7 +2,8 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>MardiumMC | Kış Dünyası</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MardiumMC | Portal</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -10,73 +11,105 @@
 
     <div id="snow"></div>
 
-    <div class="main-container">
-        <header>
-            <h1 class="logo">MARDIUM<span>MC</span></h1>
-            <nav>
-                <button onclick="showSection('home')">Anasayfa</button>
-                <button onclick="showSection('store')">Mağaza</button>
-                <button onclick="showSection('games')">Minigames</button>
-                <button onclick="showSection('vote')">Oy Ver</button>
-            </nav>
-        </header>
+    <div class="portal-container">
+        
+        <div class="header-logo">
+            <h1 class="server-name">MARDIUM<span>MC</span></h1>
+            <p class="slogan">Kışın En Sıcak Serüveni!</p>
+        </div>
 
-        <section id="home" class="page active">
-            <div class="hero">
-                <h2>Kış Macerasına Hazır Mısın?</h2>
-                <div class="info-grid">
-                    <div class="info-card" onclick="copyIp()">
-                        <i class="fas fa-network-wired"></i>
-                        <p>play.mardiummc.com</p>
-                        <span>Tıkla Kopyala</span>
-                    </div>
-                    <div class="info-card">
-                        <i class="fas fa-shield-alt"></i>
-                        <p>Hile Koruması</p>
-                        <span>7/24 Aktif</span>
-                    </div>
-                </div>
-            </div>
+        <div class="portal-menu">
+            <a href="javascript:void(0)" onclick="showPage('home')" class="menu-item">
+                <i class="fas fa-home"></i> ANASAYFA
+            </a>
+            <a href="javascript:void(0)" onclick="showPage('games')" class="menu-item">
+                <i class="fas fa-gamepad"></i> OYUNLARIMIZ
+            </a>
+            <a href="javascript:void(0)" onclick="showPage('store')" class="menu-item">
+                <i class="fas fa-shopping-cart"></i> MAĞAZA
+            </a>
+            <a href="https://minecraft-mp.com/server-s353584" target="_blank" class="menu-item vote-btn">
+                <i class="fas fa-check-circle"></i> OY VER
+            </a>
+            <a href="javascript:void(0)" onclick="showPage('staff')" class="menu-item">
+                <i class="fas fa-users"></i> YETKİLİLER
+            </a>
+        </div>
+
+        <div class="content-box">
             
-            <div class="staff-section">
-                <h3>Yönetim Kadrosu</h3>
-                <div class="staff-flex">
-                    <div class="staff"><h4>Nexorz</h4><span>1. Başkan</span></div>
-                    <div class="staff"><h4>Druhtu</h4><span>2. Başkan</span></div>
-                    <div class="staff"><h4>ttni</h4><span>Yeni Yetkili</span></div>
+            <div id="home" class="tab-content active">
+                <h2>Sunucuya Hoş Geldin!</h2>
+                <p>MardiumMC ile benzersiz bir survival ve topluluk deneyimine hazır ol.</p>
+                <div class="ip-box" onclick="copyIp()">
+                    <span id="ip">PLAY.MARDIUMMC.COM</span>
+                    <small>Tıkla Kopyala!</small>
+                </div>
+                <div class="status-bar">
+                    <span><i class="fas fa-shield-alt"></i> Hile Koruması: AKTİF</span>
+                    <span><i class="fas fa-clock"></i> 7/24 Aktif</span>
                 </div>
             </div>
-        </section>
 
-        <section id="store" class="page">
-            <h2><i class="fas fa-shopping-cart"></i> Mardium Mağaza</h2>
-            <div class="grid">
-                <div class="item-card"><h3>VIP</h3><p>1 Aylık Üyelik</p><button>Satın Al</button></div>
-                <div class="item-card"><h3>MVP+</h3><p>Süresiz Üyelik</p><button>Satın Al</button></div>
-                <div class="item-card"><h3>Kredi</h3><p>1000 Mardium Kredi</p><button>Satın Al</button></div>
+            <div id="games" class="tab-content">
+                <h2>Oyun Modlarımız</h2>
+                <div class="game-grid">
+                    <div class="game-card">
+                        <i class="fas fa-city"></i>
+                        <h3>TOWNY</h3>
+                        <p>Kendi krallığını kur ve dünyaya hükmet!</p>
+                    </div>
+                    <div class="game-card">
+                        <i class="fas fa-swords"></i>
+                        <h3>PVP</h3>
+                        <p>En yetenekli savaşçı olduğunu kanıtla.</p>
+                    </div>
+                    <div class="game-card">
+                        <i class="fas fa-cloud"></i>
+                        <h3>SKYBLOCK</h3>
+                        <p>Küçük bir adadan dev bir imparatorluğa.</p>
+                    </div>
+                </div>
             </div>
-        </section>
 
-        <section id="games" class="page">
-            <h2><i class="fas fa-gamepad"></i> Aktif Oyunlarımız</h2>
-            <div class="grid">
-                <div class="game-card"><h3>TOWNY</h3><p>Kendi kasabanı kur!</p></div>
-                <div class="game-card"><h3>PVP</h3><p>Arenada hünerlerini göster.</p></div>
-                <div class="game-card"><h3>SKYBLOCK</h3><p>Adanı en yükseğe taşı.</p></div>
+            <div id="store" class="tab-content">
+                <h2>Mardium Market</h2>
+                <p>VIP ve özel paketler ile maceranı güçlendir.</p>
+                <div class="store-placeholder">
+                    <i class="fas fa-tools"></i>
+                    <p>Mağaza Sistemi Yakında Aktif Edilecektir.</p>
+                </div>
             </div>
-        </section>
 
-        <section id="vote" class="page">
-            <h2><i class="fas fa-vote-yea"></i> Sunucuya Oy Ver</h2>
-            <p>Oy vererek ödülleri topla!</p>
-            <div class="vote-links">
-                <a href="#" class="vote-btn">Site 1</a>
-                <a href="#" class="vote-btn">Site 2</a>
+            <div id="staff" class="tab-content">
+                <h2>Yönetim Ekibi</h2>
+                <div class="staff-grid">
+                    <div class="staff-card">
+                        <div class="rank red">1. BAŞKAN</div>
+                        <h3>Nexorz</h3>
+                        <p>En İyi Başkan</p>
+                    </div>
+                    <div class="staff-card">
+                        <div class="rank orange">2. BAŞKAN</div>
+                        <h3>Druhtu</h3>
+                        <p>En İyi 2. Başkan</p>
+                    </div>
+                    <div class="staff-card">
+                        <div class="rank blue">YETKİLİ</div>
+                        <h3>ttni</h3>
+                        <p>Yeni Başlangıç</p>
+                    </div>
+                </div>
             </div>
-        </section>
+
+        </div>
+
+        <div class="footer">
+            &copy; 2026 MardiumMC | play.mardiummc.com | Tüm Hakları Saklıdır.
+        </div>
     </div>
 
-    <div id="notif">IP Kopyalandı! ❄️</div>
+    <div id="toast">IP Kopyalandı! ❄️</div>
 
     <script src="script.js"></script>
 </body>
