@@ -1,27 +1,54 @@
-// Kar Yağışı
-function createSnow() {
+// Sayfa Değiştirme Sistemi
+function showPage(pageId) {
+    // Tüm içerikleri gizle
+    const contents = document.querySelectorAll('.tab-content');
+    contents.forEach(content => {
+        content.classList.remove('active');
+    });
+
+    // İstenen içeriği göster
+    const target = document.getElementById(pageId);
+    if (target) {
+        target.classList.add('active');
+    }
+}
+
+// IP Kopyalama Fonksiyonu
+function copyIp() {
+    const ip = "play.mardiummc.com";
+    navigator.clipboard.writeText(ip).then(() => {
+        const toast = document.getElementById("toast");
+        toast.className = "show";
+        setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 2500);
+    });
+}
+
+// Canlı Kar Yağdırma Efekti
+function createSnowflake() {
     const snowContainer = document.getElementById('snow');
     const snowflake = document.createElement('div');
+    
     snowflake.classList.add('snowflake');
     snowflake.innerHTML = '❄';
-    snowflake.style.left = Math.random() * 100 + 'vw';
-    snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
-    snowflake.style.fontSize = Math.random() * 15 + 10 + 'px';
+    
+    // Rastgele değerler
+    const startX = Math.random() * 100; // Ekranın neresinden başlayacak
+    const duration = Math.random() * 3 + 2; // Düşüş hızı
+    const opacity = Math.random();
+    const size = Math.random() * 10 + 10;
+
+    snowflake.style.left = startX + 'vw';
+    snowflake.style.animationDuration = duration + 's';
+    snowflake.style.opacity = opacity;
+    snowflake.style.fontSize = size + 'px';
+    
     snowContainer.appendChild(snowflake);
-    setTimeout(() => { snowflake.remove(); }, 5000);
-}
-setInterval(createSnow, 150);
-
-// Sayfa Değiştirme
-function showSection(id) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    
+    // Kar tanesi düştükten sonra temizle
+    setTimeout(() => {
+        snowflake.remove();
+    }, duration * 1000);
 }
 
-// IP Kopyalama
-function copyIp() {
-    navigator.clipboard.writeText("play.mardiummc.com");
-    const n = document.getElementById('notif');
-    n.classList.add('show');
-    setTimeout(() => n.classList.remove('show'), 2000);
-}
+// Kar yağışını başlat (Sıklığı 150ms)
+setInterval(createSnowflake, 150);
