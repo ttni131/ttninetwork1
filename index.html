@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>MardiumMC | Portal & Mağaza</title>
+    <title>MardiumMC | Giriş Yap</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -10,18 +10,32 @@
 
     <div id="snow"></div>
 
-    <div class="top-auth-bar">
-        <div class="auth-container">
-            <form action="islem.php" method="POST" class="auth-inputs">
-                <input type="text" name="username" placeholder="Kullanıcı Adı" required>
-                <input type="password" name="password" placeholder="Şifre" required>
-                <button type="submit" name="giris_yap" class="auth-btn login">Giriş Yap</button>
-                <button type="submit" name="kayit_ol" class="auth-btn register">Kayıt Ol</button>
+    <div id="auth-screen" class="full-overlay">
+        <div class="auth-box">
+            <h1 class="logo">MARDIUM<span>MC</span></h1>
+            <p>Maceraya katılmak için giriş yap veya kayıt ol!</p>
+            
+            <form action="islem.php" method="POST" class="auth-form">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" name="username" placeholder="Kullanıcı Adı" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" name="password" placeholder="Şifre" required>
+                </div>
+                
+                <div class="auth-buttons">
+                    <button type="submit" name="giris_yap" class="btn-login">Giriş Yap</button>
+                    <button type="submit" name="kayit_ol" class="btn-register">Kayıt Ol</button>
+                </div>
             </form>
+            
+            <button class="skip-btn" onclick="hideAuth()">Sadece Siteye Göz At</button>
         </div>
     </div>
 
-    <div class="main-container">
+    <div id="main-portal" class="main-container" style="display:none;">
         <header>
             <h1 class="logo">MARDIUM<span>MC</span></h1>
             <nav>
@@ -34,75 +48,31 @@
 
         <section id="home" class="page active">
             <div class="hero">
-                <h2>Kış Macerasına Hazır Mısın?</h2>
+                <h2>Kış Macerasına Hoş Geldin!</h2>
                 <div class="info-grid">
                     <div class="info-card" onclick="copyIp()">
                         <i class="fas fa-network-wired"></i>
                         <p>play.mardiummc.com</p>
                         <span>Tıkla Kopyala</span>
                     </div>
-                    <div class="info-card">
-                        <i class="fas fa-shield-alt"></i>
-                        <p>Hile Koruması</p>
-                        <span>7/24 Aktif</span>
-                    </div>
                 </div>
             </div>
-            
-            <div class="staff-section">
-                <h3>Yönetim Kadrosu</h3>
-                <div class="staff-flex">
-                    <div class="staff"><h4>Nexorz</h4><span>1. Başkan</span></div>
-                    <div class="staff"><h4>Druhtu</h4><span>2. Başkan</span></div>
-                    <div class="staff"><h4>ttni</h4><span>Yeni Yetkili</span></div>
-                </div>
-            </div>
-        </section>
+            </section>
 
         <section id="store" class="page">
-            <h2><i class="fas fa-shopping-cart"></i> Mardium Mağaza</h2>
+            <h2><i class="fas fa-shopping-cart"></i> Mağaza</h2>
             <div class="grid">
                 <div class="item-card">
                     <div class="price-tag">25 TL</div>
                     <h3>VIP</h3>
-                    <p>1 Aylık Üyelik</p>
-                    <a href="https://www.shopier.com/SİZİN_VIP_LİNKİNİZ" target="_blank" class="buy-btn">Satın Al</a>
-                </div>
-                <div class="item-card">
-                    <div class="price-tag">50 TL</div>
-                    <h3>MVP+</h3>
-                    <p>Süresiz Üyelik</p>
-                    <a href="https://www.shopier.com/SİZİN_MVP_LİNKİNİZ" target="_blank" class="buy-btn">Satın Al</a>
-                </div>
-                <div class="item-card">
-                    <div class="price-tag">70 TL</div>
-                    <h3>KREDİ</h3>
-                    <p>1000 Mardium Kredi</p>
-                    <a href="https://www.shopier.com/SİZİN_KREDİ_LİNKİNİZ" target="_blank" class="buy-btn">Satın Al</a>
+                    <a href="https://www.shopier.com/GERCEK_LINK_BURAYA" target="_blank" class="buy-btn">Satın Al</a>
                 </div>
             </div>
         </section>
-
-        <section id="games" class="page">
-            <h2><i class="fas fa-gamepad"></i> Aktif Oyunlarımız</h2>
-            <div class="grid">
-                <div class="game-card"><h3>TOWNY</h3><p>Kendi kasabanı kur!</p></div>
-                <div class="game-card"><h3>PVP</h3><p>Arenada hünerlerini göster.</p></div>
-                <div class="game-card"><h3>SKYBLOCK</h3><p>Adanı en yükseğe taşı.</p></div>
-            </div>
-        </section>
-
-        <section id="vote" class="page">
-            <h2><i class="fas fa-vote-yea"></i> Sunucuya Oy Ver</h2>
-            <p>Oy vererek ödülleri topla!</p>
-            <div class="vote-links">
-                <a href="https://minecraft-mp.com/server-s353584" target="_blank" class="vote-btn">Minecraft-MP Oy Ver</a>
-            </div>
-        </section>
-    </div>
+        
+        </div>
 
     <div id="notif">IP Kopyalandı! ❄️</div>
-
     <script src="script.js"></script>
 </body>
 </html>
