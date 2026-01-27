@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>MardiumMC | Kış Macerası</title>
+    <title>MardiumMC | Kış Dünyası</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -10,66 +10,73 @@
 
     <div id="snow"></div>
 
-    <div class="main-content">
+    <div class="main-container">
         <header>
             <h1 class="logo">MARDIUM<span>MC</span></h1>
-            <p class="slogan">Karların Arasında Bir Efsane Doğuyor...</p>
+            <nav>
+                <button onclick="showSection('home')">Anasayfa</button>
+                <button onclick="showSection('store')">Mağaza</button>
+                <button onclick="showSection('games')">Minigames</button>
+                <button onclick="showSection('vote')">Oy Ver</button>
+            </nav>
         </header>
 
-        <section class="info-section">
-            <div class="card" onclick="copyIp()">
-                <i class="fas fa-copy"></i>
-                <h3>IP ADRESİ</h3>
-                <p>play.mardiummc.com</p>
-                <small>Kopyalamak için tıkla!</small>
+        <section id="home" class="page active">
+            <div class="hero">
+                <h2>Kış Macerasına Hazır Mısın?</h2>
+                <div class="info-grid">
+                    <div class="info-card" onclick="copyIp()">
+                        <i class="fas fa-network-wired"></i>
+                        <p>play.mardiummc.com</p>
+                        <span>Tıkla Kopyala</span>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>Hile Koruması</p>
+                        <span>7/24 Aktif</span>
+                    </div>
+                </div>
             </div>
-            <div class="card">
-                <i class="fas fa-shield-alt"></i>
-                <h3>HİLE KORUMASI</h3>
-                <p>7/24 Aktif & Güçlü</p>
-            </div>
-            <div class="card">
-                <i class="fas fa-server"></i>
-                <h3>AKTİFLİK</h3>
-                <p>7/24 Kesintisiz</p>
-            </div>
-        </section>
-
-        <section class="vote-section">
-            <div class="vote-box">
-                <h2><i class="fas fa-vote-yea"></i> Sunucuya Oy Ver</h2>
-                <p>Oy vererek bize destek ol ve oyun içi ödüller kazan!</p>
-                <div class="vote-links">
-                    <a href="#" class="vote-btn">Minecraft-MP</a>
-                    <a href="#" class="vote-btn">TopG</a>
-                    <a href="#" class="vote-btn">MC-Server-List</a>
+            
+            <div class="staff-section">
+                <h3>Yönetim Kadrosu</h3>
+                <div class="staff-flex">
+                    <div class="staff"><h4>Nexorz</h4><span>1. Başkan</span></div>
+                    <div class="staff"><h4>Druhtu</h4><span>2. Başkan</span></div>
+                    <div class="staff"><h4>ttni</h4><span>Yeni Yetkili</span></div>
                 </div>
             </div>
         </section>
 
-        <section class="staff-section">
-            <h2><i class="fas fa-user-shield"></i> Yetkili Kadromuz</h2>
-            <div class="staff-list">
-                <div class="staff-member">
-                    <img src="https://minotar.net/helm/Nexorz/100.png" alt="Nexorz">
-                    <h4>Nexorz</h4>
-                    <span class="rank boss">En İyi Başkan</span>
-                </div>
-                <div class="staff-member">
-                    <img src="https://minotar.net/helm/Druhtu/100.png" alt="Druhtu">
-                    <h4>Druhtu</h4>
-                    <span class="rank sub-boss">2. Başkan</span>
-                </div>
-                <div class="staff-member">
-                    <img src="https://minotar.net/helm/ttni/100.png" alt="ttni">
-                    <h4>ttni</h4>
-                    <span class="rank helper">Yeni Yetkili</span>
-                </div>
+        <section id="store" class="page">
+            <h2><i class="fas fa-shopping-cart"></i> Mardium Mağaza</h2>
+            <div class="grid">
+                <div class="item-card"><h3>VIP</h3><p>1 Aylık Üyelik</p><button>Satın Al</button></div>
+                <div class="item-card"><h3>MVP+</h3><p>Süresiz Üyelik</p><button>Satın Al</button></div>
+                <div class="item-card"><h3>Kredi</h3><p>1000 Mardium Kredi</p><button>Satın Al</button></div>
+            </div>
+        </section>
+
+        <section id="games" class="page">
+            <h2><i class="fas fa-gamepad"></i> Aktif Oyunlarımız</h2>
+            <div class="grid">
+                <div class="game-card"><h3>TOWNY</h3><p>Kendi kasabanı kur!</p></div>
+                <div class="game-card"><h3>PVP</h3><p>Arenada hünerlerini göster.</p></div>
+                <div class="game-card"><h3>SKYBLOCK</h3><p>Adanı en yükseğe taşı.</p></div>
+            </div>
+        </section>
+
+        <section id="vote" class="page">
+            <h2><i class="fas fa-vote-yea"></i> Sunucuya Oy Ver</h2>
+            <p>Oy vererek ödülleri topla!</p>
+            <div class="vote-links">
+                <a href="#" class="vote-btn">Site 1</a>
+                <a href="#" class="vote-btn">Site 2</a>
             </div>
         </section>
     </div>
 
-    <div id="notification">IP Başarıyla Kopyalandı! ❄️</div>
+    <div id="notif">IP Kopyalandı! ❄️</div>
 
     <script src="script.js"></script>
 </body>
