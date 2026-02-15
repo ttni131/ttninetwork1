@@ -1,1 +1,128 @@
 
+
+# -*- coding: utf-8 -*-
+import mss, keyboard, numpy as np, cv2, win32api, win32con, time, threading, colorsys
+import tkinter as tk
+from tkinter import ttk
+from ctypes import windll
+
+# --- CMD GİZLEME ---
+def extreme_hide():
+    hwnd = windll.kernel32.GetConsoleWindow()
+    if hwnd != 0: windll.user32.ShowWindow(hwnd, 0)
+
+# --- SADECE AIMBOT AYARLARI ---
+config = {
+    "aktif": False,
+    "hitbox": "Kafa",
+    "fov": 100,
+    "smooth": 2,
+    "visible": True,
+    "running": True
+}
+
+# --- GELİŞMİŞ AIM MOTORU (ROBLOX OPTİMİZE) ---
+def aim_engine():
+    sct = mss.mss()
+    sw, sh = win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1)
+    
+    # Roblox karakterleri için genişletilmiş renk aralığı
+    lower = np.array([0, 120, 120]) 
+    upper = np.array([10, 255, 255])
+    
+    while config["running"]:
+        # Sadece Aktifse ve Sol Tık basılıyorsa çalışır
+        if config["aktif"] and (win32api.GetAsyncKeyState(0x01) < 0):
+            f_rad = int(config["fov"] * 4) + 20
+            area = {"top": sh//2 - f_rad, "left": sw//2 - f_rad, "width": f_rad*2, "height": f_rad*2}
+            
+            try:
+                img = np.array(sct.grab(area))
+                hsv = cv2.cvtColor(img[:,:,:3], cv2.COLOR_BGR2HSV)
+                mask = cv2.inRange(hsv, lower, upper)
+                
+                # Netlik için parazit temizleme
+                mask = cv2.erode(mask, None, iterations=2)
+                mask = cv2.dilate(mask, None, iterations=2)
+                
+                cnts, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                
+                if cnts:
+                    target = max(cnts, key=cv2.contourArea)
+                    x, y, w, h = cv2.boundingRect(target)
+                    
+                    # Hitbox: Kafa (h//6) veya Gövde (h//2)
+                    off_y = h//6 if config["hitbox"] == "Kafa" else h//2
+                    tx, ty = (x + w//2 - f_rad), (y + off_y - f_rad)
+                    
+                    # Kilitlenme Hızı (Smooth ne kadar düşükse o kadar hızlı)
+                    div = max(config["smooth"], 0.1)
+                    win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int(tx/div), int(ty/div), 0, 0)
+            except: pass
+        time.sleep(0.001)
+
+# --- TIKLAMA SORUNU OLMAYAN RGB PANEL ---
+class FinalEliteMenu:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.geometry("400x500+100+100")
+        self.root.overrideredirect(True)
+        self.root.configure(bg="#05050a")
+        self.root.attributes("-topmost", True)
+
+        self.rgb_label = tk.Label(self.root, text="TTNI ELITE V38", bg="#05050a", font=("Impact", 28))
+        self.rgb_label.pack(pady=20)
+
+        self.active_var = tk.BooleanVar(value=False)
+        self.cb = tk.Checkbutton(self.root, text="HİLEYİ AKTİFLEŞTİR", variable=self.active_var,
+                                 bg="#05050a", fg="white", selectcolor="#111", font=("Arial", 12, "bold"))
+        self.cb.pack(pady=10)
+
+        self.hb_cb = ttk.Combobox(self.root, values=["Kafa", "Gövde"], state="readonly")
+        self.hb_cb.current(0)
+        self.hb_cb.pack(pady=5)
+
+        self.fov_s = tk.Scale(self.root, from_=10, to=400, orient="horizontal", bg="#05050a", fg="white", label="FOV (Radar)")
+        self.fov_s.set(100)
+        self.fov_s.pack(fill="x", padx=40)
+
+        self.sm_s = tk.Scale(self.root, from_=1, to=20, orient="horizontal", bg="#05050a", fg="white", label="Smooth (Hız)")
+        self.sm_s.set(2)
+        self.sm_s.pack(fill="x", padx=40)
+
+        tk.Button(self.root, text="KAPAT", command=self.root.destroy, bg="#300", fg="#f00", bd=0).pack(side="bottom", fill="x")
+
+        self.hue = 0.0
+        threading.Thread(target=aim_engine, daemon=True).start()
+        threading.Thread(target=self.logic_loop, daemon=True).start()
+        self.root.mainloop()
+
+    def logic_loop(self):
+        while config["running"]:
+            # RGB Döngüsü
+            rgb = colorsys.hsv_to_rgb(self.hue, 1, 1)
+            color = '#%02x%02x%02x' % tuple(int(x*255) for x in rgb)
+            try: self.rgb_label.config(fg=color)
+            except: pass
+            self.hue += 0.01
+
+            config["aktif"] = self.active_var.get()
+            config["hitbox"] = self.hb_cb.get()
+            config["fov"] = self.fov_s.get()
+            config["smooth"] = self.sm_s.get()
+
+            # 7 tuşu ile gizleyince tıklama engeli kalkar
+            if keyboard.is_pressed('7'):
+                config["visible"] = not config["visible"]
+                if config["visible"]:
+                    self.root.deiconify()
+                    self.root.attributes("-alpha", 1.0)
+                else:
+                    self.root.attributes("-alpha", 0.0)
+                    self.root.withdraw()
+                time.sleep(0.3)
+            time.sleep(0.05)
+
+if __name__ == "__main__":
+    extreme_hide()
+    FinalEliteMenu()
