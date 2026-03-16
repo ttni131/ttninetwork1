@@ -3,36 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ttninetwork | Duo Official</title>
+    <title>ttninetwork | Duo</title>
     <style>
-        :root { --main: #a29bfe; --bg: rgba(0, 0, 0, 0.7); }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; font-family: 'Segoe UI', sans-serif; color: white; }
+        :root { --main: #a29bfe; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; font-family: 'Poppins', sans-serif; color: white; }
 
         /* Arka Plan Live Video */
-        #bg-video { position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -1; object-fit: cover; filter: brightness(0.4); }
+        #bg-video { 
+            position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; 
+            z-index: -1; object-fit: cover; filter: brightness(0.35); 
+        }
 
         /* Giriş Ekranı */
-        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.8s; }
-        #overlay h2 { color: var(--main); border: 2px solid var(--main); padding: 20px 40px; letter-spacing: 5px; box-shadow: 0 0 20px var(--main); }
+        #overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #000; z-index: 2000; display: flex; justify-content: center; 
+            align-items: center; cursor: pointer; transition: 0.8s; 
+        }
+        #overlay h2 { 
+            color: var(--main); border: 2px solid var(--main); padding: 20px 40px; 
+            letter-spacing: 5px; box-shadow: 0 0 25px var(--main); 
+            text-transform: uppercase; animation: pulse 1.5s infinite;
+        }
 
-        /* Ana İçerik */
-        .main-container { position: relative; z-index: 2; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 1s; }
-        h1 { font-size: 4rem; color: var(--main); text-shadow: 0 0 20px #6c5ce7; margin-bottom: 30px; }
+        /* Ana Panel */
+        .main-container { 
+            position: relative; z-index: 2; height: 100vh; display: flex; 
+            flex-direction: column; justify-content: center; align-items: center; 
+            opacity: 0; transition: 1.5s; 
+        }
 
-        /* Butonlar */
-        .button-group { display: flex; gap: 20px; }
-        .kk-button { background: transparent; border: 2px solid var(--main); color: var(--main); padding: 15px 30px; font-weight: bold; cursor: pointer; border-radius: 50px; transition: 0.3s; text-transform: uppercase; }
-        .kk-button:hover { background: var(--main); color: #000; box-shadow: 0 0 20px var(--main); }
+        .box {
+            background: rgba(0, 0, 0, 0.6); padding: 60px; border-radius: 30px;
+            border: 1px solid rgba(162, 155, 254, 0.3); text-align: center;
+            backdrop-filter: blur(12px); box-shadow: 0 0 40px rgba(0,0,0,0.5);
+        }
 
-        /* Menü Katmanları (Overlay) */
-        .side-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
-        .content-box { background: #111; padding: 40px; border: 1px solid var(--main); border-radius: 20px; width: 400px; text-align: center; }
-        .close-btn { margin-top: 20px; background: #ff4757; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
+        h1 { font-size: 4.5rem; color: var(--main); text-shadow: 0 0 30px #6c5ce7; margin: 0; letter-spacing: 3px; }
         
-        video#myVideo { width: 100%; border-radius: 10px; margin-top: 10px; }
+        .duo-info { margin-top: 20px; color: #fff; font-size: 1.2rem; opacity: 0.8; }
+        .duo-info span { color: var(--main); font-weight: bold; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
     </style>
 </head>
-<body onclick="unmuteAll()">
+<body>
 
     <video autoplay muted loop playsinline id="bg-video">
         <source src="video.mp4" type="video/mp4">
@@ -42,82 +61,35 @@
         <source src="music.mp3" type="audio/mpeg">
     </audio>
 
-    <div id="overlay" onclick="start()">
-        <h2>CLICK TO ENTER</h2>
+    <div id="overlay" onclick="startSession()">
+        <h2>CLICK TO ENTER THE NETWORK</h2>
     </div>
 
     <div class="main-container" id="mainUI">
-        <h1>ttninetwork</h1>
-        <div class="button-group">
-            <button class="kk-button" onclick="toggle('market')">MARKET</button>
-            <button class="kk-button" onclick="toggle('video')">VİDEO İZLE</button>
-            <button class="kk-button" onclick="toggle('bilgi')">BİLGİ</button>
-        </div>
-    </div>
-
-    <div class="side-overlay" id="marketOverlay">
-        <div class="content-box">
-            <h2 style="color:var(--main)">MARKET</h2>
-            <hr border="0" height="1px" background="#333">
-            <div style="display:flex; justify-content:space-between; margin:15px 0;">
-                <span>VIP</span><span style="color:#50ff7e">25 TL</span>
+        <div class="box">
+            <h1>ttninetwork</h1>
+            <div class="duo-info">
+                METE & URAS <br>
+                <span>THE BEST DUO</span>
             </div>
-            <div style="display:flex; justify-content:space-between; margin:15px 0;">
-                <span>P.VIP</span><span style="color:#50ff7e">35 TL</span>
-            </div>
-            <button class="close-btn" onclick="toggle('market')">KAPAT</button>
-        </div>
-    </div>
-
-    <div class="side-overlay" id="videoOverlay">
-        <div class="content-box">
-            <h2 style="color:var(--main)">VİDEO İZLE</h2>
-            <video id="myVideo" controls>
-                <source src="video.mp4" type="video/mp4">
-            </video>
-            <button class="close-btn" onclick="toggle('video')">KAPAT</button>
-        </div>
-    </div>
-
-    <div class="side-overlay" id="bilgiOverlay">
-        <div class="content-box">
-            <h2 style="color:var(--main)">TTNİ BİLGİ</h2>
-            <div style="text-align: left; margin-top: 20px;">
-                <p>Mete (ttni): <span>13 Yaşında</span></p>
-                <p>Uras (konacore): <span>12 Yaşında</span></p>
-                <p>Duo Durumu: <span>Aktif 🔥</span></p>
-            </div>
-            <button class="close-btn" onclick="toggle('bilgi')">KAPAT</button>
         </div>
     </div>
 
     <script>
-        function start() {
+        function startSession() {
+            // Müzik çalmayı başlat
             const music = document.getElementById('bgMusic');
-            music.play();
-            document.getElementById('overlay').style.opacity = "0";
+            music.volume = 0.7; // Ses seviyesi %70
+            music.play().catch(e => console.log("Müzik dosyası 'music.mp3' bulunamadı!"));
+
+            // Giriş ekranını karart ve kaldır
+            const overlay = document.getElementById('overlay');
+            overlay.style.opacity = "0";
+            
             setTimeout(() => {
-                document.getElementById('overlay').style.display = "none";
+                overlay.style.display = "none";
                 document.getElementById('mainUI').style.opacity = "1";
             }, 800);
-        }
-
-        function toggle(type) {
-            const el = document.getElementById(type + 'Overlay');
-            el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
-            
-            // Video kapatıldığında durdur
-            if(type === 'video' && el.style.display === 'none') {
-                document.getElementById('myVideo').pause();
-            }
-        }
-
-        function unmuteAll() {
-            // Tarayıcı kısıtlamalarını aşmak için
-            const music = document.getElementById('bgMusic');
-            if (music.paused && document.getElementById('overlay').style.display === 'none') {
-                music.play();
-            }
         }
     </script>
 </body>
