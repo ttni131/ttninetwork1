@@ -3,34 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ttni vs konacore | The Showdown</title>
+    <title>ttninetwork | Official</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="split left">
-            <h1>ttni</h1>
-            <p>Master of Logic & Clean Code</p>
-            <ul class="stats">
-                <li>🚀 JavaScript</li>
-                <li>🎨 UI/UX Design</li>
-                <li>⚡ Performance Freak</li>
-            </ul>
-            <a href="#" class="button">Projelerim</a>
-        </div>
 
-        <div class="split right">
-            <h1>konacore</h1>
-            <p>System Architect & Style Wizard</p>
-            <ul class="stats">
-                <li>🐍 Python</li>
-                <li>🛠️ Backend Expert</li>
-                <li>🔥 Creative Soul</li>
-            </ul>
-            <a href="#" class="button">Onun İşleri</a>
-        </div>
+    <canvas id="snow"></canvas>
 
-        <div class="vs-badge">VS</div>
+    <div class="main-container">
+        <div class="profile-box">
+            <h1>ttninetwork</h1>
+            <p class="subtitle">Welcome to my digital space.</p>
+            
+            <div class="links">
+                <button class="info-btn" onclick="openModal()">ttnibilgi</button>
+                <a href="https://github.com/ttni" target="_blank" class="github-link">GitHub</a>
+            </div>
+        </div>
     </div>
+
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>User Profile: ttni</h2>
+            <hr>
+            <p><strong>Ad:</strong> Mete (ttni)</p>
+            <p><strong>Yaş:</strong> 13</p>
+            <p><strong>Best Duo:</strong> konacore</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
