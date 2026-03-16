@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ttninetwork | Neon Duo</title>
+    <title>ttninetwork | Secure Neon</title>
     <style>
         :root { --neon: #39ff14; }
         
@@ -11,6 +11,7 @@
             margin: 0; padding: 0; width: 100%; height: 100%; 
             background: #000; overflow: hidden; 
             font-family: 'Courier New', monospace; color: white; 
+            user-select: none; /* Yazıların seçilmesini engeller */
         }
 
         /* Arka Plan Live Video */
@@ -44,23 +45,15 @@
             backdrop-filter: blur(8px); box-shadow: 0 0 30px rgba(57, 255, 20, 0.2);
         }
 
-        h1 { 
-            font-size: 4rem; color: var(--neon); 
-            text-shadow: 0 0 15px var(--neon); margin: 0; 
-        }
+        h1 { font-size: 4rem; color: var(--neon); text-shadow: 0 0 15px var(--neon); margin: 0; }
         
-        /* Bilgi Butonu */
         .info-btn {
             margin-top: 30px; background: transparent; border: 2px solid var(--neon);
             color: var(--neon); padding: 12px 35px; cursor: pointer; 
             font-weight: bold; text-transform: uppercase; transition: 0.3s;
         }
-        .info-btn:hover { 
-            background: var(--neon); color: #000; 
-            box-shadow: 0 0 25px var(--neon); 
-        }
+        .info-btn:hover { background: var(--neon); color: #000; box-shadow: 0 0 25px var(--neon); }
 
-        /* Bilgi Modal (Açılan Pencere) */
         .modal { 
             display: none; position: fixed; z-index: 3000; 
             left: 0; top: 0; width: 100%; height: 100%; 
@@ -71,14 +64,10 @@
             border: 2px solid var(--neon); width: 350px; border-radius: 10px; 
             color: var(--neon); text-align: center; box-shadow: 0 0 40px var(--neon);
         }
-        .m-content h3 { border-bottom: 1px dotted var(--neon); padding-bottom: 10px; }
-        .m-content p { font-size: 1.1rem; margin: 20px 0; color: #fff; }
         .m-content span { color: var(--neon); font-weight: bold; }
     </style>
 </head>
-<body>
-
-    <video autoplay muted loop playsinline id="bg-video">
+<body oncontextmenu="return false;"> <video autoplay muted loop playsinline id="bg-video">
         <source src="video.mp4" type="video/mp4">
     </video>
 
@@ -99,21 +88,29 @@
 
     <div id="infoModal" class="modal" onclick="closeModal()">
         <div class="m-content" onclick="event.stopPropagation()">
-            <h3>USER_DATABASE</h3>
+            <h3>SECURE_DATABASE</h3>
             <p>Admin: <span>Mete (ttni)</span></p>
             <p>Duo: <span>Uras (konacore)</span></p>
-            <p>Status: <span style="color: #39ff14;">ONLINE</span></p>
-            <button class="info-btn" style="font-size: 0.7rem;" onclick="closeModal()">GERİ DÖN</button>
+            <p>Status: <span style="color: #39ff14;">PROTECTED</span></p>
+            <button class="info-btn" style="font-size: 0.7rem;" onclick="closeModal()">KAPAT</button>
         </div>
     </div>
 
     <script>
-        function start() {
-            // Müzik çal
-            const music = document.getElementById('bgMusic');
-            music.play().catch(e => console.log("Dosya ismi hatalı!"));
+        // Sağ tık engelleme (Garanti olsun diye)
+        document.addEventListener('contextmenu', event => event.preventDefault());
 
-            // Ekranı değiştir
+        // F12 ve Kısayol engelleme
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) { return false; } // F12
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; } // Ctrl+Shift+I
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { return false; } // Ctrl+Shift+C
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; } // Ctrl+Shift+J
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; } // Ctrl+U (Kaynak kodu)
+        };
+
+        function start() {
+            document.getElementById('bgMusic').play();
             document.getElementById('overlay').style.opacity = "0";
             setTimeout(() => {
                 document.getElementById('overlay').style.display = "none";
