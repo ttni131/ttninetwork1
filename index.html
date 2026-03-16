@@ -6,6 +6,8 @@
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; overflow: hidden; font-family: 'Arial', sans-serif; }
         canvas { position: fixed; top: 0; left: 0; z-index: 1; pointer-events: none; }
+        
+        /* Giriş Ekranı */
         #overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 1000; display: flex;
@@ -13,15 +15,28 @@
             transition: opacity 0.8s ease;
         }
         #overlay h2 { color: #a29bfe; border: 2px solid #a29bfe; padding: 20px 40px; border-radius: 10px; text-transform: uppercase; letter-spacing: 5px; animation: pulse 1.5s infinite; }
+
+        /* Ana İçerik */
         .content { position: relative; z-index: 2; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 1s ease; }
         .box { background: rgba(15, 15, 15, 0.85); padding: 60px; border-radius: 40px; border: 3px solid #a29bfe; text-align: center; box-shadow: 0 0 30px rgba(162, 155, 254, 0.4); backdrop-filter: blur(10px); }
+        
         h1 { font-size: 4rem; margin: 0; color: #a29bfe; text-shadow: 0 0 20px #6c5ce7; }
+        
         .info-btn { margin-top: 30px; background: transparent; border: 2px solid #a29bfe; color: #a29bfe; padding: 15px 40px; font-size: 1.2rem; cursor: pointer; font-weight: bold; border-radius: 50px; transition: 0.3s; }
         .info-btn:hover { background: #a29bfe; color: #000; box-shadow: 0 0 25px #a29bfe; }
-        .modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); }
-        .m-content { background: #1a1a1a; margin: 15% auto; padding: 40px; border: 2px solid #a29bfe; width: 300px; border-radius: 20px; color: #fff; line-height: 1.8; }
-        .m-content span { color: #a29bfe; font-weight: bold; }
+
+        /* Popup (Modal) */
+        .modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); backdrop-filter: blur(8px); }
+        .m-content { background: #1a1a1a; margin: 10% auto; padding: 40px; border: 2px solid #a29bfe; width: 450px; border-radius: 20px; color: #fff; animation: pop 0.4s ease; }
+        
+        .duo-container { display: flex; justify-content: space-between; gap: 20px; }
+        .profile-card { flex: 1; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 10px; border: 1px solid #333; }
+        .profile-card h3 { color: #a29bfe; margin-top: 0; border-bottom: 1px solid #a29bfe; padding-bottom: 10px; }
+        .profile-card div { margin: 8px 0; }
+        .profile-card span { color: #a29bfe; font-weight: bold; }
+
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -44,11 +59,23 @@
     </div>
 
     <div id="infoModal" class="modal" onclick="this.style.display='none'">
-        <div class="m-content">
-            <h3>User: ttni</h3>
-            <div>Ad: <span>Mete (ttni)</span></div>
-            <div>Yaş: <span>13</span></div>
-            <div>Best Duo: <span>konacore</span></div>
+        <div class="m-content" onclick="event.stopPropagation()">
+            <h2 style="text-align:center; color:#a29bfe; margin-bottom:30px;">THE BEST DUO</h2>
+            <div class="duo-container">
+                <div class="profile-card">
+                    <h3>ttni</h3>
+                    <div>Ad: <span>Mete</span></div>
+                    <div>Yaş: <span>13</span></div>
+                    <div>Duo: <span>konacore</span></div>
+                </div>
+                <div class="profile-card">
+                    <h3>konacore</h3>
+                    <div>Ad: <span>Uras</span></div>
+                    <div>Yaş: <span>12</span></div>
+                    <div>Duo: <span>ttni</span></div>
+                </div>
+            </div>
+            <p style="text-align:center; font-size: 0.8rem; opacity: 0.5; margin-top: 25px;">Kapatmak için dışarı tıkla.</p>
         </div>
     </div>
 
@@ -58,7 +85,7 @@
         const content = document.getElementById("mainContent");
 
         function startEverything() {
-            music.play().catch(e => console.log("Dosya bulunamadı: İsimleri kontrol et."));
+            music.play().catch(e => console.log("Müzik çalma hatası: İsimleri kontrol et."));
             overlay.style.opacity = "0";
             setTimeout(() => {
                 overlay.style.display = "none";
@@ -68,11 +95,12 @@
 
         function openModal() { document.getElementById('infoModal').style.display='block'; }
 
+        // Kar Yağışı Ayarları
         const c = document.getElementById('snow'), ctx = c.getContext('2d');
         let w, h, f = [];
         function init() { 
             w = window.innerWidth; h = window.innerHeight; c.width = w; c.height = h;
-            f = []; for(let i=0; i<150; i++) f.push({x:Math.random()*w, y:Math.random()*h, r:Math.random()*3+1, d:Math.random()*0.8+0.5});
+            f = []; for(let i=0; i<150; i++) f.push({x:Math.random()*w, y:Math.random()*h, r:Math.random()*3+1, d:Math.random()*0.8+0.4});
         }
         function draw() {
             ctx.clearRect(0,0,w,h); ctx.fillStyle='#fff'; ctx.beginPath();
