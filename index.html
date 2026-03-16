@@ -2,38 +2,49 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ttninetwork | Official</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS BURADA */
+        body { margin: 0; background-color: #1a1a1a; color: #a29bfe; font-family: sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        canvas { position: fixed; top: 0; left: 0; z-index: 1; }
+        .box { position: relative; z-index: 2; text-align: center; background: rgba(0,0,0,0.6); padding: 40px; border: 2px solid #a29bfe; border-radius: 20px; }
+        h1 { font-size: 3rem; margin: 0; color: #a29bfe; text-shadow: 0 0 10px #6c5ce7; }
+        button { background: transparent; border: 2px solid #a29bfe; color: #a29bfe; padding: 10px 20px; cursor: pointer; margin-top: 20px; font-weight: bold; border-radius: 5px; }
+        button:hover { background: #a29bfe; color: #1a1a1a; }
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); }
+        .m-content { background: #2d2d2d; margin: 15% auto; padding: 20px; border: 1px solid #a29bfe; width: 250px; border-radius: 10px; color: white; }
+    </style>
 </head>
 <body>
-
     <canvas id="snow"></canvas>
-
-    <div class="main-container">
-        <div class="profile-box">
-            <h1>ttninetwork</h1>
-            <p class="subtitle">Welcome to my digital space.</p>
-            
-            <div class="links">
-                <button class="info-btn" onclick="openModal()">ttnibilgi</button>
-                <a href="https://github.com/ttni" target="_blank" class="github-link">GitHub</a>
-            </div>
+    <div class="box">
+        <h1>ttninetwork</h1>
+        <button onclick="document.getElementById('m').style.display='block'">ttnibilgi</button>
+    </div>
+    <div id="m" class="modal" onclick="this.style.display='none'">
+        <div class="m-content">
+            <h3>User: ttni</h3>
+            <p>Ad: Mete</p>
+            <p>Yaş: 13</p>
+            <p>Best Duo: konacore</p>
         </div>
     </div>
-
-    <div id="infoModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2>User Profile: ttni</h2>
-            <hr>
-            <p><strong>Ad:</strong> Mete (ttni)</p>
-            <p><strong>Yaş:</strong> 13</p>
-            <p><strong>Best Duo:</strong> konacore</p>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+    <script>
+        const c = document.getElementById('snow'), ctx = c.getContext('2d');
+        let w, h, f = [];
+        function init() { 
+            w = window.innerWidth; h = window.innerHeight; c.width = w; c.height = h;
+            f = []; for(let i=0; i<150; i++) f.push({x:Math.random()*w, y:Math.random()*h, r:Math.random()*3+1, d:Math.random()*1+0.5});
+        }
+        function draw() {
+            ctx.clearRect(0,0,w,h); ctx.fillStyle='white'; ctx.beginPath();
+            f.forEach(p => { ctx.moveTo(p.x, p.y); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); });
+            ctx.fill(); update(); requestAnimationFrame(draw);
+        }
+        function update() {
+            f.forEach(p => { p.y += p.d; if(p.y > h) p.y = 0; p.x += Math.sin(p.y/30); });
+        }
+        window.onresize = init; init(); draw();
+    </script>
 </body>
 </html>
