@@ -1,160 +1,1467 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ttninetwork | Secure Neon Rain</title>
-    <style>
-        :root { --neon: #39ff14; }
-        
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            background: #000; overflow: hidden; 
-            font-family: 'Courier New', monospace; color: white; 
-            user-select: none;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TTNi AI — Yapay Zeka Asistanı</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0F0E13;
+    --bg2: #17151E;
+    --bg3: #1F1C2A;
+    --bg4: #272434;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #EAE8F0;
+    --text2: #9E98B3;
+    --text3: #5E5873;
+    --accent: #7C5CFC;
+    --accent2: #5B8EF8;
+    --accent3: #22D3EE;
+    --green: #34D399;
+    --red: #F87171;
+    --amber: #FBBF24;
+    --grad: linear-gradient(135deg, #7C5CFC, #5B8EF8, #22D3EE);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; width: 100%; overflow: hidden; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    height: 100vh;
+  }
 
-        /* Yağmur Canvası */
-        #rainCanvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; filter: blur(1px);
-        }
+  /* ═══ SIDEBAR ═══ */
+  #sidebar {
+    width: 270px;
+    min-width: 270px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
 
-        /* Giriş Ekranı */
-        #overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #000; z-index: 2000; display: flex; justify-content: center; 
-            align-items: center; cursor: pointer; transition: 0.8s; 
-        }
-        #overlay h2 { 
-            color: var(--neon); border: 3px solid var(--neon); padding: 20px 40px; 
-            box-shadow: 0 0 20px var(--neon), inset 0 0 10px var(--neon); 
-            text-transform: uppercase; letter-spacing: 5px;
-        }
+  #sidebar-top {
+    padding: 18px 16px 12px;
+    border-bottom: 1px solid var(--border);
+  }
 
-        /* Ana Panel */
-        .main-container { 
-            position: relative; z-index: 2; height: 100vh; 
-            display: flex; flex-direction: column; justify-content: center; 
-            align-items: center; opacity: 0; transition: 1s; 
-        }
+  #branding {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
 
-        .box {
-            background: rgba(0, 0, 0, 0.85); padding: 50px; border-radius: 10px;
-            border: 2px solid var(--neon); text-align: center;
-            backdrop-filter: blur(10px); box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
-        }
+  #logo-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--grad);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 0 20px rgba(124,92,252,0.4);
+  }
 
-        h1 { font-size: 4rem; color: var(--neon); text-shadow: 0 0 15px var(--neon); margin: 0; }
-        
-        .info-btn {
-            margin-top: 30px; background: transparent; border: 2px solid var(--neon);
-            color: var(--neon); padding: 12px 35px; cursor: pointer; 
-            font-weight: bold; text-transform: uppercase; transition: 0.3s;
-        }
-        .info-btn:hover { background: var(--neon); color: #000; box-shadow: 0 0 25px var(--neon); }
+  #brand-name {
+    font-size: 18px;
+    font-weight: 600;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.3px;
+  }
 
-        .modal { 
-            display: none; position: fixed; z-index: 3000; 
-            left: 0; top: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(15px);
-        }
-        .m-content { 
-            background: #000; margin: 15% auto; padding: 40px; 
-            border: 2px solid var(--neon); width: 350px; border-radius: 10px; 
-            color: var(--neon); text-align: center; box-shadow: 0 0 40px var(--neon);
-        }
-        .m-content span { color: var(--neon); font-weight: bold; }
-    </style>
+  #brand-tag {
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  #new-chat-btn {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(124,92,252,0.15);
+    border: 1px solid rgba(124,92,252,0.3);
+    border-radius: 12px;
+    color: #A78BFA;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  #new-chat-btn:hover {
+    background: rgba(124,92,252,0.25);
+    border-color: rgba(124,92,252,0.5);
+    transform: translateY(-1px);
+  }
+  #new-chat-btn svg { flex-shrink: 0; }
+
+  #chat-list-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text3);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 14px 16px 6px;
+  }
+
+  #chat-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 4px 8px;
+  }
+  #chat-list::-webkit-scrollbar { width: 3px; }
+  #chat-list::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 2px; }
+
+  .chat-item {
+    padding: 9px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 2px;
+    transition: background 0.15s;
+    position: relative;
+    group: true;
+  }
+  .chat-item:hover { background: var(--bg3); }
+  .chat-item.active { background: rgba(124,92,252,0.15); }
+  .chat-item-icon { font-size: 14px; flex-shrink: 0; opacity: 0.7; }
+  .chat-item-label { font-size: 13px; color: var(--text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0; }
+  .chat-item.active .chat-item-label { color: var(--text); }
+  .chat-del-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text3);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .chat-del-btn:hover { color: var(--red); }
+  .chat-item:hover .chat-del-btn { display: block; }
+
+  #sidebar-bottom {
+    padding: 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .model-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--bg3);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .model-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .model-name { font-size: 12px; color: var(--text2); flex: 1; }
+  .model-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    background: rgba(52,211,153,0.15);
+    color: var(--green);
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  /* ═══ MAIN ═══ */
+  #main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    min-width: 0;
+    position: relative;
+  }
+
+  /* ═══ TOPBAR ═══ */
+  #topbar {
+    padding: 0 20px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+    flex-shrink: 0;
+  }
+
+  #current-chat-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .topbar-action {
+    padding: 7px 13px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text2);
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .topbar-action:hover { background: var(--bg4); color: var(--text); border-color: var(--border2); }
+  .topbar-action.danger:hover { border-color: rgba(248,113,113,0.4); color: var(--red); }
+
+  /* ═══ MESSAGES ═══ */
+  #messages-wrap {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 0;
+    scroll-behavior: smooth;
+  }
+  #messages-wrap::-webkit-scrollbar { width: 4px; }
+  #messages-wrap::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 2px; }
+
+  #messages-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Welcome */
+  #welcome-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 60px 20px 20px;
+    gap: 20px;
+  }
+
+  #welcome-orb {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--grad);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 0 40px rgba(124,92,252,0.5), 0 0 80px rgba(91,142,248,0.2);
+    animation: orb-float 3s ease-in-out infinite;
+  }
+  @keyframes orb-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+  #welcome-title {
+    font-size: 30px;
+    font-weight: 600;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+  }
+
+  #welcome-sub { font-size: 15px; color: var(--text2); max-width: 440px; line-height: 1.6; }
+
+  #suggestion-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    max-width: 560px;
+    margin-top: 8px;
+  }
+
+  .suggestion {
+    padding: 14px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .suggestion:hover {
+    background: var(--bg3);
+    border-color: rgba(124,92,252,0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(124,92,252,0.15);
+  }
+  .suggestion-icon { font-size: 20px; margin-bottom: 8px; display: block; }
+  .suggestion-text { font-size: 13px; color: var(--text2); line-height: 1.4; }
+
+  /* Messages */
+  .msg { display: flex; gap: 14px; animation: msg-in 0.3s ease; }
+  @keyframes msg-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  .msg.user { flex-direction: row-reverse; }
+
+  .msg-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+  .msg.user .msg-avatar { background: var(--grad); color: white; }
+  .msg.ai .msg-avatar { background: var(--bg3); border: 1px solid var(--border); color: var(--text2); font-size: 16px; }
+
+  .msg-content { display: flex; flex-direction: column; gap: 4px; max-width: calc(100% - 50px); }
+  .msg.user .msg-content { align-items: flex-end; }
+
+  .msg-bubble {
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.7;
+    word-break: break-word;
+  }
+  .msg.user .msg-bubble {
+    background: linear-gradient(135deg, #7C5CFC, #5B8EF8);
+    color: white;
+    border-bottom-right-radius: 4px;
+  }
+  .msg.ai .msg-bubble {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-bottom-left-radius: 4px;
+  }
+
+  .msg-bubble pre {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin: 10px 0;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: #C9D1D9;
+  }
+  .msg-bubble code {
+    background: rgba(124,92,252,0.15);
+    color: #C9B1FD;
+    padding: 2px 6px;
+    border-radius: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  .msg-bubble pre code { background: none; color: inherit; padding: 0; }
+  .msg-bubble strong { font-weight: 600; color: #E9D5FF; }
+  .msg.user .msg-bubble strong { color: rgba(255,255,255,0.9); }
+  .msg-bubble h1,.msg-bubble h2,.msg-bubble h3 { margin: 12px 0 6px; font-weight: 600; }
+  .msg-bubble ul,.msg-bubble ol { padding-left: 18px; margin: 6px 0; }
+  .msg-bubble li { margin-bottom: 4px; }
+  .msg-bubble a { color: var(--accent2); text-decoration: underline; }
+
+  .msg-meta {
+    font-size: 11px;
+    color: var(--text3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .copy-btn {
+    background: none;
+    border: none;
+    color: var(--text3);
+    cursor: pointer;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover { color: var(--text2); background: var(--bg3); }
+
+  .typing-indicator {
+    display: flex;
+    gap: 5px;
+    padding: 6px 0;
+    align-items: center;
+  }
+  .typing-indicator span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: bounce 1.2s infinite;
+  }
+  .typing-indicator span:nth-child(2) { animation-delay: 0.2s; background: var(--accent2); }
+  .typing-indicator span:nth-child(3) { animation-delay: 0.4s; background: var(--accent3); }
+  @keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-8px)} }
+
+  /* ═══ INPUT AREA ═══ */
+  #input-area {
+    padding: 12px 20px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--bg2);
+    flex-shrink: 0;
+  }
+
+  #tools-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tool-chip {
+    padding: 5px 12px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text3);
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.15s;
+  }
+  .tool-chip:hover { border-color: var(--border2); color: var(--text2); }
+  .tool-chip.on { background: rgba(124,92,252,0.15); border-color: rgba(124,92,252,0.4); color: #A78BFA; }
+
+  #input-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  #msg-input {
+    flex: 1;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 13px 18px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    resize: none;
+    min-height: 50px;
+    max-height: 160px;
+    outline: none;
+    line-height: 1.5;
+    transition: border-color 0.2s;
+  }
+  #msg-input:focus { border-color: rgba(124,92,252,0.5); }
+  #msg-input::placeholder { color: var(--text3); }
+
+  #send-btn {
+    width: 48px;
+    height: 48px;
+    background: var(--grad);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(124,92,252,0.35);
+  }
+  #send-btn:hover { transform: scale(1.05); box-shadow: 0 6px 24px rgba(124,92,252,0.5); }
+  #send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+  #send-btn svg { color: white; }
+
+  #input-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+  }
+  #char-count { font-size: 11px; color: var(--text3); }
+  #input-hint { font-size: 11px; color: var(--text3); }
+
+  /* ═══ PC PANEL ═══ */
+  #pc-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 90;
+    display: none;
+    backdrop-filter: blur(4px);
+  }
+  #pc-overlay.open { display: block; }
+
+  #pc-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 420px;
+    height: 100vh;
+    background: var(--bg2);
+    border-left: 1px solid var(--border);
+    z-index: 100;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    display: flex;
+    flex-direction: column;
+  }
+  #pc-panel.open { transform: translateX(0); }
+
+  #pc-header {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  #pc-header-left { display: flex; align-items: center; gap: 10px; }
+  #pc-header h3 { font-size: 15px; font-weight: 600; color: var(--text); }
+  .pc-status { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--green); }
+  .pc-status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  #pc-close-btn { background: none; border: none; color: var(--text3); font-size: 20px; cursor: pointer; padding: 4px; border-radius: 6px; line-height: 1; }
+  #pc-close-btn:hover { background: var(--bg3); color: var(--text); }
+
+  #pc-tabs {
+    display: flex;
+    padding: 10px 12px 0;
+    gap: 4px;
+    border-bottom: 1px solid var(--border);
+  }
+  .pc-tab {
+    flex: 1;
+    padding: 8px 6px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text3);
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: -1px;
+  }
+  .pc-tab.active { border-bottom-color: var(--accent); color: #A78BFA; }
+  .pc-tab:hover:not(.active) { color: var(--text2); }
+
+  #pc-body { flex: 1; overflow: hidden; display: flex; flex-direction: column; }
+
+  .pc-tab-content { display: none; flex: 1; flex-direction: column; padding: 14px; gap: 10px; overflow: hidden; }
+  .pc-tab-content.active { display: flex; }
+
+  /* Terminal */
+  #term-output {
+    flex: 1;
+    background: #0A090E;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    color: #A8EDAF;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    min-height: 200px;
+  }
+  #term-output::-webkit-scrollbar { width: 3px; }
+  #term-output::-webkit-scrollbar-thumb { background: var(--bg4); }
+  .term-line-cmd { color: #60A5FA; }
+  .term-line-err { color: var(--red); }
+  .term-line-info { color: var(--amber); }
+
+  #term-input-row { display: flex; gap: 8px; }
+  #term-prompt { color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; align-self: center; flex-shrink: 0; }
+  #term-input {
+    flex: 1;
+    background: #0A090E;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    outline: none;
+  }
+  #term-input:focus { border-color: rgba(124,92,252,0.5); }
+  #term-run-btn {
+    padding: 8px 16px;
+    background: rgba(124,92,252,0.2);
+    border: 1px solid rgba(124,92,252,0.3);
+    border-radius: 10px;
+    color: #A78BFA;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  #term-run-btn:hover { background: rgba(124,92,252,0.3); }
+
+  /* Files tab */
+  #path-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text2);
+    flex-shrink: 0;
+  }
+
+  #file-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 3px; }
+  #file-list::-webkit-scrollbar { width: 3px; }
+  #file-list::-webkit-scrollbar-thumb { background: var(--bg4); }
+
+  .file-entry {
+    padding: 9px 12px;
+    background: var(--bg3);
+    border: 1px solid transparent;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text2);
+    transition: all 0.15s;
+  }
+  .file-entry:hover { background: var(--bg4); border-color: var(--border); color: var(--text); }
+  .file-icon { font-size: 16px; flex-shrink: 0; }
+  .file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-size { font-size: 11px; color: var(--text3); flex-shrink: 0; }
+
+  /* Sys info tab */
+  .sys-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+  }
+  .sys-card-title { font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+  .sys-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 13px; }
+  .sys-label { color: var(--text2); }
+  .sys-value { color: var(--text); font-weight: 500; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .sys-bar-wrap { flex: 1; height: 4px; background: var(--bg4); border-radius: 2px; margin: 0 10px; overflow: hidden; }
+  .sys-bar { height: 100%; border-radius: 2px; background: var(--grad); }
+
+  /* ═══ SETTINGS MODAL ═══ */
+  #settings-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+  }
+  #settings-overlay.open { display: flex; }
+
+  #settings-modal {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 20px;
+    padding: 28px;
+    width: 460px;
+    max-width: 95vw;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+    animation: modal-in 0.25s ease;
+  }
+  @keyframes modal-in { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
+
+  #settings-modal h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .setting-section { display: flex; flex-direction: column; gap: 6px; }
+  .setting-label { font-size: 12px; font-weight: 500; color: var(--text2); letter-spacing: 0.3px; }
+  .setting-desc { font-size: 11px; color: var(--text3); margin-top: -2px; }
+
+  .setting-input {
+    padding: 10px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+  .setting-input:focus { border-color: rgba(124,92,252,0.5); }
+  textarea.setting-input { resize: vertical; min-height: 90px; line-height: 1.5; }
+  select.setting-input { cursor: pointer; }
+
+  .settings-footer {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 4px;
+    border-top: 1px solid var(--border);
+  }
+  .btn-cancel {
+    padding: 9px 20px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text2);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-cancel:hover { background: var(--bg4); color: var(--text); }
+  .btn-save {
+    padding: 9px 24px;
+    background: var(--grad);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(124,92,252,0.35);
+  }
+  .btn-save:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(124,92,252,0.5); }
+
+  /* Scrollbar global */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 2px; }
+</style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
-    <canvas id="rainCanvas"></canvas>
-
-    <div id="overlay" onclick="start()">
-        <h2>SYSTEM INITIALIZE</h2>
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<div id="sidebar">
+  <div id="sidebar-top">
+    <div id="branding">
+      <div id="logo-mark">T</div>
+      <div>
+        <div id="brand-name">TTNi AI</div>
+        <div id="brand-tag">Pro • Ücretsiz</div>
+      </div>
     </div>
+    <button id="new-chat-btn" onclick="createNewChat()">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+      Yeni Sohbet
+    </button>
+  </div>
 
-    <div class="main-container" id="mainUI">
-        <div class="box">
-            <h1>ttninetwork</h1>
-            <button class="info-btn" onclick="openModal()">BİLGİ</button>
+  <div id="chat-list-label">Sohbetler</div>
+  <div id="chat-list"></div>
+
+  <div id="sidebar-bottom">
+    <div class="model-pill">
+      <div class="model-dot"></div>
+      <span class="model-name">TTNi Pro</span>
+      <span class="model-badge">Aktif</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<div id="main">
+
+  <!-- Topbar -->
+  <div id="topbar">
+    <span id="current-chat-name">Yeni Sohbet</span>
+    <button class="topbar-action" onclick="openPcPanel()">
+      <span>💻</span> PC Erişimi
+    </button>
+    <button class="topbar-action" onclick="clearCurrentChat()" class="danger">
+      <span>🗑</span> Temizle
+    </button>
+    <button class="topbar-action" onclick="openSettings()">
+      <span>⚙️</span> Ayarlar
+    </button>
+  </div>
+
+  <!-- Messages -->
+  <div id="messages-wrap">
+    <div id="messages-inner">
+      <div id="welcome-screen">
+        <div id="welcome-orb">✦</div>
+        <div id="welcome-title">TTNi AI'ya Hoş Geldiniz</div>
+        <div id="welcome-sub">Yapay zeka asistanınız hazır. Herhangi bir soruyu sorun, kod yazdırın, analiz yaptırın veya PC'nize erişin.</div>
+        <div id="suggestion-grid">
+          <button class="suggestion" onclick="quickSend('Python ile web scraper kodu yazar mısın? Açıklamalı olsun.')">
+            <span class="suggestion-icon">🐍</span>
+            <span class="suggestion-text">Python kodu yaz ve açıkla</span>
+          </button>
+          <button class="suggestion" onclick="quickSend('Günümüz yapay zeka teknolojilerini anlat, hangileri öne çıkıyor?')">
+            <span class="suggestion-icon">🤖</span>
+            <span class="suggestion-text">Teknoloji trendleri anlat</span>
+          </button>
+          <button class="suggestion" onclick="quickSend('Profesyonel bir iş başvurusu emaili taslağı hazırla')">
+            <span class="suggestion-icon">📧</span>
+            <span class="suggestion-text">Profesyonel email yaz</span>
+          </button>
+          <button class="suggestion" onclick="quickSend('React hooks nedir, useState ve useEffect örneklerle anlat')">
+            <span class="suggestion-icon">⚛️</span>
+            <span class="suggestion-text">React hooks öğret</span>
+          </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div id="input-area">
+    <div id="tools-row">
+      <button class="tool-chip" id="chip-search" onclick="toggleChip('search')">🔍 Web Ara</button>
+      <button class="tool-chip" id="chip-code" onclick="toggleChip('code')">💻 Kod</button>
+      <button class="tool-chip" id="chip-math" onclick="toggleChip('math')">🧮 Matematik</button>
+      <button class="tool-chip" id="chip-translate" onclick="toggleChip('translate')">🌐 Çeviri</button>
+      <button class="tool-chip" id="chip-creative" onclick="toggleChip('creative')">✨ Yaratıcı</button>
+    </div>
+    <div id="input-row">
+      <textarea id="msg-input" placeholder="TTNi AI'ya mesaj yazın... (Enter gönderi, Shift+Enter yeni satır)" rows="1"
+        onkeydown="handleInputKey(event)" oninput="handleInputChange(this)"></textarea>
+      <button id="send-btn" onclick="sendMessage()" title="Gönder">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+    <div id="input-footer">
+      <span id="char-count">0 karakter</span>
+      <span id="input-hint">Enter → Gönder &nbsp;|&nbsp; Shift+Enter → Yeni satır</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PC PANEL ═══════════ -->
+<div id="pc-overlay" onclick="closePcPanel()"></div>
+<div id="pc-panel">
+  <div id="pc-header">
+    <div id="pc-header-left">
+      <div style="font-size:20px">💻</div>
+      <div>
+        <h3>PC Erişimi</h3>
+        <div class="pc-status"><div class="pc-status-dot"></div> AI Terminali Aktif</div>
+      </div>
+    </div>
+    <button id="pc-close-btn" onclick="closePcPanel()">✕</button>
+  </div>
+
+  <div id="pc-tabs">
+    <button class="pc-tab active" onclick="switchPcTab('terminal', this)">🖥 Terminal</button>
+    <button class="pc-tab" onclick="switchPcTab('files', this)">📁 Dosyalar</button>
+    <button class="pc-tab" onclick="switchPcTab('sysinfo', this)">📊 Sistem</button>
+    <button class="pc-tab" onclick="switchPcTab('notes', this)">📝 Notlar</button>
+  </div>
+
+  <div id="pc-body">
+    <!-- Terminal Tab -->
+    <div class="pc-tab-content active" id="tab-terminal">
+      <div id="term-output">TTNi AI Terminal v2.0
+──────────────────────────────
+Yapay Zeka ile terminal simülasyonu
+Komutları AI yorumlar ve simüle eder.
+Gerçek PC erişimi için Python versiyonu gerekir.
+──────────────────────────────
+$ </div>
+      <div id="term-input-row">
+        <span id="term-prompt">❯</span>
+        <input id="term-input" placeholder="komut yazın..." onkeydown="handleTermKey(event)"/>
+        <button id="term-run-btn" onclick="runTerminalCmd()">Çalıştır</button>
+      </div>
     </div>
 
-    <div id="infoModal" class="modal" onclick="closeModal()">
-        <div class="m-content" onclick="event.stopPropagation()">
-            <h3>SECURE_DATABASE</h3>
-            <p>Admin: <span>Mete (ttni)</span></p>
-            <p>Duo: <span>Uras (konacore)</span></p>
-            <p>Status: <span style="color: #39ff14;">PROTECTED</span></p>
-            <button class="info-btn" style="font-size: 0.7rem;" onclick="closeModal()">KAPAT</button>
+    <!-- Files Tab -->
+    <div class="pc-tab-content" id="tab-files">
+      <div id="path-bar">📍 C:\Users\Kullanici</div>
+      <div id="file-list">
+        <div class="file-entry" onclick="fileAsk('Belgeler klasörü')">
+          <span class="file-icon">📁</span>
+          <span class="file-name">Belgeler</span>
+          <span class="file-size">—</span>
         </div>
+        <div class="file-entry" onclick="fileAsk('Masaüstü klasörü')">
+          <span class="file-icon">📁</span>
+          <span class="file-name">Masaüstü</span>
+          <span class="file-size">—</span>
+        </div>
+        <div class="file-entry" onclick="fileAsk('İndirilenler klasörü')">
+          <span class="file-icon">📁</span>
+          <span class="file-name">İndirilenler</span>
+          <span class="file-size">—</span>
+        </div>
+        <div class="file-entry">
+          <span class="file-icon">🐍</span>
+          <span class="file-name">script.py</span>
+          <span class="file-size">2.4 KB</span>
+        </div>
+        <div class="file-entry">
+          <span class="file-icon">📄</span>
+          <span class="file-name">notlar.txt</span>
+          <span class="file-size">1.1 KB</span>
+        </div>
+        <div class="file-entry">
+          <span class="file-icon">📊</span>
+          <span class="file-name">rapor.xlsx</span>
+          <span class="file-size">48 KB</span>
+        </div>
+        <div class="file-entry">
+          <span class="file-icon">🌐</span>
+          <span class="file-name">index.html</span>
+          <span class="file-size">12 KB</span>
+        </div>
+      </div>
     </div>
 
-    <script>
-        // YAĞMUR EFEKTİ KODU
-        const canvas = document.getElementById('rainCanvas');
-        const ctx = canvas.getContext('2d');
+    <!-- Sys Info Tab -->
+    <div class="pc-tab-content" id="tab-sysinfo">
+      <div class="sys-card">
+        <div class="sys-card-title">İşlemci</div>
+        <div class="sys-row">
+          <span class="sys-label">Model</span>
+          <span class="sys-value">Intel Core i7-12700</span>
+        </div>
+        <div class="sys-row">
+          <span class="sys-label">Kullanım</span>
+          <div class="sys-bar-wrap"><div class="sys-bar" style="width:38%"></div></div>
+          <span class="sys-value">38%</span>
+        </div>
+      </div>
+      <div class="sys-card">
+        <div class="sys-card-title">Bellek</div>
+        <div class="sys-row">
+          <span class="sys-label">Toplam</span>
+          <span class="sys-value">16 GB DDR4</span>
+        </div>
+        <div class="sys-row">
+          <span class="sys-label">Kullanılan</span>
+          <div class="sys-bar-wrap"><div class="sys-bar" style="width:62%"></div></div>
+          <span class="sys-value">9.9 GB</span>
+        </div>
+      </div>
+      <div class="sys-card">
+        <div class="sys-card-title">Depolama</div>
+        <div class="sys-row">
+          <span class="sys-label">C: SSD</span>
+          <div class="sys-bar-wrap"><div class="sys-bar" style="width:55%"></div></div>
+          <span class="sys-value">275/512 GB</span>
+        </div>
+      </div>
+      <div class="sys-card">
+        <div class="sys-card-title">Ağ</div>
+        <div class="sys-row"><span class="sys-label">IP Adresi</span><span class="sys-value">192.168.1.105</span></div>
+        <div class="sys-row"><span class="sys-label">Bağlantı</span><span class="sys-value" style="color:var(--green)">● Bağlı</span></div>
+      </div>
+    </div>
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+    <!-- Notes Tab -->
+    <div class="pc-tab-content" id="tab-notes">
+      <textarea id="notes-area" class="setting-input" style="flex:1; resize:none; min-height:0; font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.7"
+        placeholder="Notlarınızı buraya yazın...&#10;AI'ya da sohbette sorabilirsiniz."></textarea>
+      <button onclick="saveNotes()" style="padding:9px 18px; background:rgba(124,92,252,0.2); border:1px solid rgba(124,92,252,0.3); border-radius:10px; color:#A78BFA; font-size:13px; font-family:'DM Sans',sans-serif; cursor:pointer;">
+        💾 Kaydet
+      </button>
+    </div>
+  </div>
+</div>
 
-        const drops = [];
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
+<!-- ═══════════ SETTINGS MODAL ═══════════ -->
+<div id="settings-overlay" onclick="handleSettingsOverlayClick(event)">
+  <div id="settings-modal">
+    <h2>⚙️ Ayarlar</h2>
 
-        for (let i = 0; i < columns; i++) {
-            drops[i] = 1;
-        }
+    <div class="setting-section">
+      <label class="setting-label">Sistem Promptu (Kişilik)</label>
+      <div class="setting-desc">AI'nın nasıl davranacağını belirler</div>
+      <textarea class="setting-input" id="set-system" rows="4">Sen TTNi AI'sın. Türkçe konuşan, zeki, yardımsever ve dostane bir yapay zeka asistanısın. Kod sorularında detaylı açıklamalar yaparsın.</textarea>
+    </div>
 
-        function drawRain() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+    <div class="setting-section">
+      <label class="setting-label">AI Modeli</label>
+      <select class="setting-input" id="set-model">
+        <option value="claude-sonnet-4-20250514" selected>⚡ TTNi Pro (Claude Sonnet) — Önerilen</option>
+      </select>
+    </div>
 
-            ctx.fillStyle = '#39ff14'; // Neon Yeşil
-            ctx.font = fontSize + 'px monospace';
+    <div class="setting-section">
+      <label class="setting-label">Maksimum Token: <span id="token-display">1000</span></label>
+      <div class="setting-desc">Yanıt uzunluğunu etkiler (100–4000)</div>
+      <input type="range" class="setting-input" id="set-tokens" min="100" max="4000" step="100" value="1000"
+        oninput="document.getElementById('token-display').textContent=this.value" style="padding:6px 0; background:none; border:none;">
+    </div>
 
-            for (let i = 0; i < drops.length; i++) {
-                const text = "01"; // Yağmur damlaları 0 ve 1'lerden oluşsun
-                const x = i * fontSize;
-                const y = drops[i] * fontSize;
+    <div class="setting-section">
+      <label class="setting-label">Sıcaklık (Yaratıcılık): <span id="temp-display">0.7</span></label>
+      <div class="setting-desc">Düşük = tutarlı, Yüksek = yaratıcı</div>
+      <input type="range" class="setting-input" id="set-temp" min="0" max="1" step="0.1" value="0.7"
+        oninput="document.getElementById('temp-display').textContent=this.value" style="padding:6px 0; background:none; border:none;">
+    </div>
 
-                ctx.fillText(text.charAt(Math.floor(Math.random() * text.length)), x, y);
+    <div class="settings-footer">
+      <button class="btn-cancel" onclick="closeSettings()">İptal</button>
+      <button class="btn-save" onclick="saveSettings()">✓ Kaydet</button>
+    </div>
+  </div>
+</div>
 
-                if (y > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
+<script>
+// ─── STATE ───────────────────────────────────────────────────────────────────
+const APP = {
+  chats: {},
+  currentId: null,
+  activeChips: new Set(),
+  settings: {
+    system: 'Sen TTNi AI\'sın. Türkçe konuşan, zeki, yardımsever ve dostane bir yapay zeka asistanısın. Kod sorularında detaylı açıklamalar yaparsın.',
+    model: 'claude-sonnet-4-20250514',
+    maxTokens: 1000,
+    temperature: 0.7
+  },
+  streaming: false,
+  notes: ''
+};
 
-        setInterval(drawRain, 33);
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 5); }
 
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
+function now() {
+  return new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+}
 
-        // GÜVENLİK KODLARI
-        document.addEventListener('contextmenu', event => event.preventDefault());
+function escapeHtml(text) {
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
 
-        document.onkeydown = function(e) {
-            if (e.keyCode == 123) return false;
-            if (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) return false;
-            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false;
-        };
+function markdownToHtml(text) {
+  // Code blocks first
+  text = text.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
+    return `<pre><code class="lang-${lang}">${escapeHtml(code.trim())}</code></pre>`;
+  });
+  // Inline code
+  text = text.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+  // Bold & italic
+  text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  // Headers
+  text = text.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  text = text.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  text = text.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+  // Lists
+  text = text.replace(/^\s*[-*] (.+)$/gm, '<li>$1</li>');
+  text = text.replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>');
+  text = text.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+  // Links
+  text = text.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank">$1</a>');
+  // Line breaks
+  text = text.replace(/\n\n/g, '</p><p>');
+  text = text.replace(/\n/g, '<br>');
+  return text;
+}
 
-        function start() {
-            document.getElementById('overlay').style.opacity = "0";
-            setTimeout(() => {
-                document.getElementById('overlay').style.display = "none";
-                document.getElementById('mainUI').style.opacity = "1";
-            }, 800);
-        }
+// ─── CHAT MANAGEMENT ─────────────────────────────────────────────────────────
+function createNewChat() {
+  const id = uid();
+  APP.chats[id] = {
+    id,
+    title: 'Yeni Sohbet',
+    messages: [],
+    created: Date.now()
+  };
+  switchToChat(id);
+  renderSidebar();
+}
 
-        function openModal() { document.getElementById('infoModal').style.display = 'block'; }
-        function closeModal() { document.getElementById('infoModal').style.display = 'none'; }
-    </script>
+function switchToChat(id) {
+  APP.currentId = id;
+  renderSidebar();
+  renderMessages();
+  document.getElementById('current-chat-name').textContent = APP.chats[id]?.title || 'Sohbet';
+}
+
+function deleteChat(id, e) {
+  e.stopPropagation();
+  if (!confirm('Bu sohbeti silmek istiyor musunuz?')) return;
+  delete APP.chats[id];
+  const ids = Object.keys(APP.chats);
+  if (APP.currentId === id) {
+    if (ids.length) switchToChat(ids[ids.length - 1]);
+    else createNewChat();
+  } else {
+    renderSidebar();
+  }
+}
+
+function clearCurrentChat() {
+  if (!APP.currentId) return;
+  if (!confirm('Sohbet geçmişi temizlensin mi?')) return;
+  APP.chats[APP.currentId].messages = [];
+  renderMessages();
+}
+
+function autoTitle(chatId, text) {
+  const chat = APP.chats[chatId];
+  if (chat && chat.title === 'Yeni Sohbet' && text.trim()) {
+    chat.title = text.trim().slice(0, 35) + (text.length > 35 ? '…' : '');
+    document.getElementById('current-chat-name').textContent = chat.title;
+    renderSidebar();
+  }
+}
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+function renderSidebar() {
+  const el = document.getElementById('chat-list');
+  const ids = Object.keys(APP.chats).reverse();
+  el.innerHTML = ids.map(id => {
+    const c = APP.chats[id];
+    const active = id === APP.currentId ? 'active' : '';
+    return `<div class="chat-item ${active}" onclick="switchToChat('${id}')">
+      <span class="chat-item-icon">💬</span>
+      <span class="chat-item-label">${escapeHtml(c.title)}</span>
+      <button class="chat-del-btn" onclick="deleteChat('${id}', event)" title="Sil">×</button>
+    </div>`;
+  }).join('');
+}
+
+function renderMessages() {
+  const wrap = document.getElementById('messages-inner');
+  const chat = APP.chats[APP.currentId];
+
+  if (!chat || !chat.messages.length) {
+    wrap.innerHTML = `
+      <div id="welcome-screen">
+        <div id="welcome-orb">✦</div>
+        <div id="welcome-title">TTNi AI'ya Hoş Geldiniz</div>
+        <div id="welcome-sub">Yapay zeka asistanınız hazır. Herhangi bir soruyu sorun, kod yazdırın, analiz yaptırın veya PC'nize erişin.</div>
+        <div id="suggestion-grid">
+          <button class="suggestion" onclick="quickSend('Python ile web scraper kodu yazar mısın? Açıklamalı olsun.')">
+            <span class="suggestion-icon">🐍</span><span class="suggestion-text">Python kodu yaz ve açıkla</span>
+          </button>
+          <button class="suggestion" onclick="quickSend('Günümüz yapay zeka teknolojilerini anlat')">
+            <span class="suggestion-icon">🤖</span><span class="suggestion-text">Teknoloji trendleri anlat</span>
+          </button>
+          <button class="suggestion" onclick="quickSend('Profesyonel bir iş başvurusu emaili taslağı hazırla')">
+            <span class="suggestion-icon">📧</span><span class="suggestion-text">Profesyonel email yaz</span>
+          </button>
+          <button class="suggestion" onclick="quickSend('React hooks nedir, useState ve useEffect anlat')">
+            <span class="suggestion-icon">⚛️</span><span class="suggestion-text">React hooks öğret</span>
+          </button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  wrap.innerHTML = chat.messages.map((m, i) => buildMsgHtml(m, i)).join('');
+  scrollToBottom();
+}
+
+function buildMsgHtml(msg, idx) {
+  const isUser = msg.role === 'user';
+  const avatar = isUser ? 'S' : '✦';
+  const content = isUser ? escapeHtml(msg.content).replace(/\n/g, '<br>') : markdownToHtml(msg.content);
+
+  return `<div class="msg ${isUser ? 'user' : 'ai'}">
+    <div class="msg-avatar">${avatar}</div>
+    <div class="msg-content">
+      <div class="msg-bubble">${content}</div>
+      <div class="msg-meta">
+        <span>${msg.time || ''}</span>
+        ${!isUser ? `<button class="copy-btn" onclick="copyMsg(${idx})">📋 Kopyala</button>` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function appendMsg(msg) {
+  const chat = APP.chats[APP.currentId];
+  if (!chat) return;
+  chat.messages.push(msg);
+
+  const wrap = document.getElementById('messages-inner');
+  const welcome = wrap.querySelector('#welcome-screen');
+  if (welcome) welcome.remove();
+
+  const el = document.createElement('div');
+  el.innerHTML = buildMsgHtml(msg, chat.messages.length - 1);
+  wrap.appendChild(el.firstElementChild);
+  scrollToBottom();
+}
+
+function scrollToBottom() {
+  const w = document.getElementById('messages-wrap');
+  w.scrollTo({ top: w.scrollHeight, behavior: 'smooth' });
+}
+
+function copyMsg(idx) {
+  const chat = APP.chats[APP.currentId];
+  if (!chat || !chat.messages[idx]) return;
+  navigator.clipboard.writeText(chat.messages[idx].content).then(() => {
+    const btns = document.querySelectorAll('.copy-btn');
+    if (btns[idx]) { btns[idx].textContent = '✓ Kopyalandı'; setTimeout(() => { btns[idx].textContent = '📋 Kopyala'; }, 1500); }
+  });
+}
+
+// ─── SEND MESSAGE ─────────────────────────────────────────────────────────────
+async function sendMessage() {
+  const input = document.getElementById('msg-input');
+  const text = input.value.trim();
+  if (!text || APP.streaming) return;
+
+  if (!APP.currentId) createNewChat();
+  autoTitle(APP.currentId, text);
+
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('char-count').textContent = '0 karakter';
+
+  appendMsg({ role: 'user', content: text, time: now() });
+
+  // Typing indicator
+  const typingEl = document.createElement('div');
+  typingEl.className = 'msg ai';
+  typingEl.id = 'typing-el';
+  typingEl.innerHTML = `<div class="msg-avatar">✦</div>
+    <div class="msg-content">
+      <div class="msg-bubble">
+        <div class="typing-indicator"><span></span><span></span><span></span></div>
+      </div>
+    </div>`;
+  document.getElementById('messages-inner').appendChild(typingEl);
+  scrollToBottom();
+
+  document.getElementById('send-btn').disabled = true;
+  APP.streaming = true;
+
+  // Build system prompt with active chips
+  let system = APP.settings.system;
+  if (APP.activeChips.has('code')) system += ' Kod sorularında mutlaka kod bloğu kullan, dili belirt ve açıkla.';
+  if (APP.activeChips.has('math')) system += ' Matematik sorularında adım adım çözüm göster.';
+  if (APP.activeChips.has('translate')) system += ' Çeviri yapıyorsan hem kaynak hem hedef dili belirt.';
+  if (APP.activeChips.has('creative')) system += ' Yaratıcı ve ilgi çekici yanıtlar ver.';
+  if (APP.activeChips.has('search')) system += ' Güncel bilgi gerektiren konularda bunu belirt ve en bilgili şekilde yanıtla.';
+
+  const chat = APP.chats[APP.currentId];
+  const apiMessages = chat.messages.slice(-20).map(m => ({ role: m.role, content: m.content }));
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: APP.settings.model,
+        max_tokens: APP.settings.maxTokens,
+        system: system,
+        messages: apiMessages
+      })
+    });
+
+    const data = await res.json();
+    let reply = '';
+
+    if (data.content && data.content[0]) {
+      reply = data.content[0].text || '';
+    } else if (data.error) {
+      reply = `❌ Hata: ${data.error.message || 'Bilinmeyen hata'}`;
+    } else {
+      reply = 'Yanıt alınamadı.';
+    }
+
+    typingEl.remove();
+    appendMsg({ role: 'assistant', content: reply, time: now() });
+
+  } catch (err) {
+    typingEl.remove();
+    appendMsg({ role: 'assistant', content: `❌ Bağlantı hatası: ${err.message}\n\nLütfen internet bağlantınızı kontrol edin.`, time: now() });
+  }
+
+  document.getElementById('send-btn').disabled = false;
+  APP.streaming = false;
+}
+
+function quickSend(text) {
+  if (!APP.currentId) createNewChat();
+  document.getElementById('msg-input').value = text;
+  sendMessage();
+}
+
+// ─── INPUT HANDLERS ───────────────────────────────────────────────────────────
+function handleInputKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function handleInputChange(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
+  document.getElementById('char-count').textContent = el.value.length + ' karakter';
+}
+
+function toggleChip(name) {
+  const chip = document.getElementById('chip-' + name);
+  if (APP.activeChips.has(name)) {
+    APP.activeChips.delete(name);
+    chip.classList.remove('on');
+  } else {
+    APP.activeChips.add(name);
+    chip.classList.add('on');
+  }
+}
+
+// ─── PC PANEL ─────────────────────────────────────────────────────────────────
+function openPcPanel() {
+  document.getElementById('pc-panel').classList.add('open');
+  document.getElementById('pc-overlay').classList.add('open');
+}
+
+function closePcPanel() {
+  document.getElementById('pc-panel').classList.remove('open');
+  document.getElementById('pc-overlay').classList.remove('open');
+}
+
+function switchPcTab(tab, btn) {
+  document.querySelectorAll('.pc-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.pc-tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+function handleTermKey(e) {
+  if (e.key === 'Enter') runTerminalCmd();
+}
+
+async function runTerminalCmd() {
+  const input = document.getElementById('term-input');
+  const cmd = input.value.trim();
+  if (!cmd) return;
+  input.value = '';
+
+  const out = document.getElementById('term-output');
+  out.textContent += '\n$ ' + cmd + '\n';
+  out.textContent += 'İşleniyor...\n';
+  out.scrollTop = out.scrollHeight;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: APP.settings.model,
+        max_tokens: 600,
+        system: 'Sen bir Windows/Linux terminal simülatörüsün. Kullanıcı bir terminal komutu çalıştırdı. Gerçek terminal çıktısı gibi kısa, özlü ve teknik bir çıktı üret. Türkçe açıklama ekleyebilirsin ama çıktı terminal formatında olsun.',
+        messages: [{ role: 'user', content: 'Komut: ' + cmd }]
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'Hata.';
+    // Remove the "İşleniyor..." line and add reply
+    const lines = out.textContent.split('\n');
+    lines.pop(); lines.pop(); // remove "İşleniyor..."
+    out.textContent = lines.join('\n') + '\n' + reply + '\n$ ';
+  } catch(e) {
+    out.textContent += 'Hata: Bağlantı kurulamadı\n$ ';
+  }
+  out.scrollTop = out.scrollHeight;
+}
+
+function fileAsk(name) {
+  closePcPanel();
+  if (!APP.currentId) createNewChat();
+  quickSend(`"${name}" hakkında bilgi ver veya bu klasördeki dosyaları yönetmeme yardım et.`);
+}
+
+function saveNotes() {
+  APP.notes = document.getElementById('notes-area').value;
+  const btn = event.target;
+  btn.textContent = '✓ Kaydedildi!';
+  setTimeout(() => btn.textContent = '💾 Kaydet', 1500);
+}
+
+// ─── SETTINGS ─────────────────────────────────────────────────────────────────
+function openSettings() {
+  document.getElementById('set-system').value = APP.settings.system;
+  document.getElementById('set-model').value = APP.settings.model;
+  document.getElementById('set-tokens').value = APP.settings.maxTokens;
+  document.getElementById('token-display').textContent = APP.settings.maxTokens;
+  document.getElementById('set-temp').value = APP.settings.temperature;
+  document.getElementById('temp-display').textContent = APP.settings.temperature;
+  document.getElementById('settings-overlay').classList.add('open');
+}
+
+function closeSettings() {
+  document.getElementById('settings-overlay').classList.remove('open');
+}
+
+function handleSettingsOverlayClick(e) {
+  if (e.target.id === 'settings-overlay') closeSettings();
+}
+
+function saveSettings() {
+  APP.settings.system = document.getElementById('set-system').value;
+  APP.settings.model = document.getElementById('set-model').value;
+  APP.settings.maxTokens = parseInt(document.getElementById('set-tokens').value) || 1000;
+  APP.settings.temperature = parseFloat(document.getElementById('set-temp').value) || 0.7;
+  closeSettings();
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+createNewChat();
+</script>
 </body>
 </html>
